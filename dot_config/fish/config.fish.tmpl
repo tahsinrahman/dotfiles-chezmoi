@@ -1,0 +1,33 @@
+if status is-interactive
+    # Commands to run in interactive sessions can go here
+end
+
+if not functions -q fundle; eval (curl -sfL https://git.io/fundle-install); end
+
+fundle plugin 'IlanCosman/tide'
+fundle plugin 'jethrokuan/z'
+fundle plugin 'PatrickF1/fzf.fish'
+fundle plugin 'franciscolourenco/done'
+fundle plugin 'jorgebucaran/replay.fish'
+fundle plugin 'jorgebucaran/autopair.fish'
+fundle plugin joseluisq/gitnow --url 'git@github.com:joseluisq/gitnow.git#tags/2.10.0'
+fundle plugin 'gazorby/fish-abbreviation-tips'
+fundle plugin 'tuvistavie/oh-my-fish-core'
+fundle plugin 'edc/bass'
+
+fundle init
+
+# Configure tide after fundle has loaded it
+# tide configure --auto --style=Lean --prompt_colors='True color' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=No
+
+# direnv hook fish | source
+
+fish_add_path $HOME/.spicetify
+
+{{- if eq .chezmoi.os "darwin" }}
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :
+
+set -x OBJC_DISABLE_INITIALIZE_FORK_SAFETY YES
+{{- end }}
