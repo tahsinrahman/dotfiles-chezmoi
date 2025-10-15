@@ -19,6 +19,11 @@ fundle plugin 'gazorby/fish-abbreviation-tips'
 fundle plugin 'tuvistavie/oh-my-fish-core'
 fundle plugin 'edc/bass'
 
+# Install plugins if they're not already installed
+if not test -d ~/.config/fish/fundle
+    fundle install
+end
+
 fundle init
 
 # Configure tide after fundle has loaded it
