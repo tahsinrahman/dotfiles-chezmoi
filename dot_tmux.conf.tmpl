@@ -1,0 +1,130 @@
+set -g default-terminal "screen-256color"
+set -g history-limit 999999999
+set -g buffer-limit 20
+set -sg escape-time 0
+set -g display-time 1500
+set -g remain-on-exit off
+set -g repeat-time 300
+set -g allow-rename off
+set -g automatic-rename off
+set -g aggressive-resize on
+
+# set pane status bar 
+set -g pane-border-status top
+
+# Setting the prefix from C-b to C-a
+# Free the original Ctrl-b prefix keybinding
+unbind C-b
+set -g prefix C-a
+# Ensure that we can send Ctrl-A to other apps
+bind C-a send-prefix
+
+# Set parent terminal hitle to reflect current window in tmux session 
+set -g set-titles on
+set -g set-titles-string "#I:#W"
+
+
+#setting the delay between prefix and command
+set -s escape-time 1
+
+# Set the base index for windows to 1 instead of 0
+# Set the base index for panes to 1 instead of 0
+set -g base-index 1
+set -g pane-base-index 1
+
+# Reload the file with Prefix r
+bind r source-file ~/.tmux.conf \; display "Reloaded!"
+
+# mouse support - set to on if you want to use the mouse
+set -g mouse off
+
+# Set the default terminal mode to 256color mode
+set -g default-terminal "screen-256color"
+
+# set the status line's colors
+set -g status-style fg=white,bg=black
+
+# set the color of the window list
+setw -g window-status-style fg=cyan,bg=black
+
+# set colors for the active window
+setw -g window-status-current-style fg=white,bold,bg=red
+
+# colors for pane borders
+setw -g pane-border-style fg=green,bg=black
+setw -g pane-active-border-style fg=white,bg=blue
+
+# active pane normal, other shaded out
+##setw -g window-style fg=white,bg=black
+##setw -g window-active-style fg=white,bg=black
+
+# Command / message line
+set -g message-style fg=white,bold,bg=black
+
+# Status line left side to show Session:window:pane
+set -g status-left-length 40
+set -g status-left "#[fg=green]Session: #S #[fg=yellow]#I #[fg=cyan]#P"
+
+# Status line right side -  31-Oct 13:37
+set -g status-right "#[fg=cyan]%d %b %R"
+
+# Update the status line every sixty seconds
+set -g status-interval 60
+
+# Center the window list in the status line
+set -g status-justify centre
+
+# enable activity alerts
+setw -g monitor-activity on
+set -g visual-activity on
+
+# enable vi keys.
+setw -g mode-keys vi
+
+bind Escape copy-mode
+bind-key -T copy-mode-vi 'v' send -X begin-selection
+bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel
+unbind P
+bind P paste-buffer
+
+# set default shell
+set -g default-shell fish
+
+unbind C-S
+bind C-Y set-window-option synchronize-panes
+
+
+# set -g prefix None
+bind -Troot C-a switchc -Tprefix
+bind -Tprefix C-x if -F '#{s/empty//:key-table}' 'set key-table empty' 'set -u key-table'
+bind -Tempty F12 switchc -Tprefix
+
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-pain-control'
+set -g @plugin 'tmux-plugins/tmux-sidebar'
+
+# nested tmux config
+set -g @plugin 'MunifTanjim/tmux-mode-indicator'
+set -g status-right '%Y-%m-%d %H:%M #{tmux_mode_indicator}'
+
+# set -g @plugin 'tmux-plugins/tmux-resurrect'
+# place the plugin last in the TPM plugins list
+# set -g @plugin 'tmux-plugins/tmux-continuum'
+
+
+#s plugin options
+# set -g @continuum-boot 'on'
+# set -g @continuum-boot-options 'alacritty,fullscreen'
+# set -g @continuum-restore 'on'
+# set -g @sidebar-tree-command 'broot'
+
+# set -g @plugin 'tmux-plugins/tmux-sensible'
+
+# for nested tmux sessions
+set -g @plugin 'MunifTanjim/tmux-suspend'
+
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+
