@@ -59,7 +59,8 @@ Chezmoi provides these OS identifiers:
 
 ### Current Platform-Specific Configurations
 
-- **AeroSpace (`dot_aerospace.toml`)**: macOS-only window manager configuration
+- **AeroSpace (`dot_aerospace.toml`)**: macOS-only window manager configuration (entire file excluded on Linux via `.chezmoiignore`)
+- **Fish init (`dot_config/fish/conf.d/init.fish.tmpl`)**: Contains macOS-specific Homebrew paths that are conditionally included only on macOS
 
 ## Development Guidelines
 
@@ -71,10 +72,47 @@ Chezmoi provides these OS identifiers:
 
 ### Making Files Platform-Specific
 
-To make a file apply only to specific platforms:
+**Method 1: Exclude entire files with .chezmoiignore**
 
-1. Add to `.chezmoiignore` with conditional logic
-2. Test with `chezmoi apply --dry-run` on different systems
+To exclude entire files on specific platforms, use `.chezmoiignore`:
+
+```
+{{- if ne .chezmoi.os "darwin" }}
+.aerospace.toml
+{{- end }}
+```
+
+Note: Patterns in `.chezmoiignore` match target paths (destination), not source paths.
+
+**Method 2: Platform-specific content within files (Templates)**
+
+To include platform-specific lines within a file, add it as a template:
+
+```bash
+# Add file as template
+chezmoi add --template ~/.config/fish/conf.d/init.fish
+```
+
+Then edit the template to add conditional logic:
+
+```fish
+{{- if eq .chezmoi.os "darwin" }}
+set -gx PATH /opt/homebrew/bin $PATH
+set -gx PATH /opt/homebrew/sbin $PATH
+{{- end }}
+```
+
+The `{{- }}` syntax trims whitespace, preventing empty lines on other platforms.
+
+**Testing templates:**
+
+```bash
+# Preview what the file will look like
+chezmoi cat ~/.config/fish/conf.d/init.fish
+
+# Test with dry-run
+chezmoi apply --dry-run --verbose
+```
 
 ### Testing Changes
 

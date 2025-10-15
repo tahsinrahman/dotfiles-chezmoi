@@ -1,0 +1,23 @@
+set -xg GOPATH $HOME/go
+set -xg GOBIN $GOPATH/bin
+set -xg EDITOR vim
+
+set -gx PATH $GOBIN $PATH
+set -gx PATH $HOME/.krew/bin $PATH
+{{- if eq .chezmoi.os "darwin" }}
+set -gx PATH /opt/homebrew/bin $PATH
+set -gx PATH /opt/homebrew/sbin $PATH
+{{- else if eq .chezmoi.os "linux" }}
+set -gx PATH /home/linuxbrew/.linuxbrew/bin $PATH
+{{- end }}
+set -gx PATH $HOME/.local/bin $PATH
+set -gx PATH /usr/local/go/bin $PATH
+
+alias k="kubectl"
+
+alias ls='lsd'
+alias diff='delta'
+alias watch='hwatch --shell "fish -c" --color --no-title'
+
+fish_hybrid_key_bindings
+
