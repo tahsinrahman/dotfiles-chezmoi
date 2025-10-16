@@ -1,0 +1,37 @@
+font:
+  size: 13
+  normal:
+    family: MesloLGS NF
+
+# Colors (Hyper)
+colors:
+  # Default colors
+  primary:
+    background: '#000000'
+    foreground: '#ffffff'
+  cursor:
+    text: '#F81CE5'
+    cursor: '#ffffff'
+
+  # Normal colors
+  normal:
+    black:   '#000000'
+    red:     '#fe0100'
+    green:   '#00a600'
+    yellow:  '#feff00'
+    blue:    '#0066ff'
+    magenta: '#cc00ff'
+    cyan:    '#00ffff'
+    white:   '#d0d0d0'
+
+  # Bright colors
+  bright:
+    black:   '#808080'
+    red:     '#fe0100'
+    green:   '#00d900'
+    yellow:  '#feff00'
+    blue:    '#0066ff'
+    magenta: '#cc00ff'
+    cyan:    '#00ffff'
+    white:   '#FFFFFF'
+

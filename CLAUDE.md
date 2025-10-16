@@ -114,6 +114,140 @@ chezmoi cat ~/.config/fish/conf.d/init.fish
 chezmoi apply --dry-run --verbose
 ```
 
+### Managing Sensitive Data with Templates
+
+**Important**: Never commit sensitive data (tokens, passwords, API keys) to the repository. Use chezmoi's data file to store private information.
+
+**Configuration File Location**: `~/.config/chezmoi/chezmoi.toml`
+
+This file is stored **outside** the chezmoi source directory and is **not committed to git**.
+
+**Example: Storing Git credentials**
+
+1. Create the data file `~/.config/chezmoi/chezmoi.toml`:
+
+```toml
+[data.git]
+    email = "your.email@example.com"
+    name = "Your Name"
+
+[data.git.credential]
+    token = "your-secret-token-here"
+```
+
+2. Reference the data in your template files using `{{ .variableName }}`:
+
+```gitconfig
+# In dot_gitconfig.tmpl
+[user]
+    email = {{ .git.email }}
+    name = {{ .git.name }}
+
+[credential]
+    helper = "!f() { echo \"password={{ .git.credential.token }}\"; }; f"
+```
+
+3. Preview the rendered template:
+
+```bash
+chezmoi cat ~/.gitconfig
+```
+
+**Machine-specific configurations:**
+
+You can conditionally include configuration blocks based on machine type (work vs. personal):
+
+1. Add a machine identifier to `~/.config/chezmoi/chezmoi.toml`:
+
+```toml
+[data.machine]
+    is_work = true
+
+[data.git]
+    email = "your.email@example.com"
+    name = "Your Name"
+
+[data.git.credential]
+    token = "your-work-token"
+```
+
+2. Use conditionals in your templates:
+
+```gitconfig
+# In dot_gitconfig.tmpl
+[user]
+    email = {{ .git.email }}
+    name = {{ .git.name }}
+
+{{- if .machine.is_work }}
+[credential]
+    helper = "!f() { echo \"password={{ .git.credential.token }}\"; }; f"
+{{- end }}
+```
+
+On personal machines, set `is_work = false` in chezmoi.toml and the credential block won't be included.
+
+**External work-specific configs (not committed):**
+
+For configurations containing sensitive work information (internal domains, IPs, credentials, etc.) that should never be committed to version control, use include directives with external files:
+
+**SSH Config Example:**
+
+```ssh-config
+# In private_dot_ssh/private_config.tmpl
+Include ~/.orbstack/ssh/config
+Include ~/.ssh/config.work
+
+Host github.com
+ HostName ssh.github.com
+ Port 443
+```
+
+Create work file locally (NOT managed by chezmoi):
+```bash
+# ~/.ssh/config.work
+Host *.internal.company.com
+ ProxyCommand ssh-proxy -h=%h
+```
+
+**Git Config Example:**
+
+```gitconfig
+# In dot_gitconfig.tmpl
+[user]
+    email = {{ .git.email }}
+    name = {{ .git.name }}
+
+[include]
+    path = ~/.gitconfig.work
+```
+
+Create work file locally (NOT managed by chezmoi):
+```bash
+# ~/.gitconfig.work
+[url "git@gitlab.company.com:"]
+    insteadOf = https://gitlab.company.com
+
+[credential]
+    helper = "!f() { echo \"password=YOUR_TOKEN\"; }; f"
+```
+
+On personal machines, simply don't create the work config files - both SSH and Git will silently skip missing include files.
+
+**Setting up on a new machine:**
+
+1. Clone and initialize chezmoi: `chezmoi init <your-repo-url>`
+2. Create `~/.config/chezmoi/chezmoi.toml` with your machine-specific data
+3. Apply configs: `chezmoi apply`
+4. *Work machines only:* Create work-specific configs:
+   - `~/.ssh/config.work` - Work SSH hosts
+   - `~/.gitconfig.work` - Work Git URL rewrites and credentials
+
+**Files currently using templates:**
+- `dot_gitconfig.tmpl` - Git configuration with external work includes
+- `private_dot_ssh/private_config.tmpl` - SSH config with external work includes
+- `dot_config/fish/conf.d/init.fish.tmpl` - Fish shell with platform-specific paths
+
 ### Testing Changes
 
 Before applying changes:
