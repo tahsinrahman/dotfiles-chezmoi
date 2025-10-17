@@ -88,7 +88,7 @@ unbind P
 bind P paste-buffer
 
 # set default shell
-set -g default-shell fish
+set -g default-shell {{ lookPath "fish" }}
 
 unbind C-S
 bind C-Y set-window-option synchronize-panes
@@ -126,5 +126,9 @@ set -g @plugin 'MunifTanjim/tmux-suspend'
 
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+{{- if eq .chezmoi.os "linux" }}
+run '/home/linuxbrew/.linuxbrew/opt/tpm/share/tpm/tpm'
+{{- else }}
 run '~/.tmux/plugins/tpm/tpm'
+{{- end }}
 
