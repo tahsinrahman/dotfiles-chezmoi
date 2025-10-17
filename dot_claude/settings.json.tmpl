@@ -49,7 +49,7 @@
     "gitlab-pm@fleet-tools": true,
     "code-reviewer@fleet-tools": true
   },
-  "alwaysThinkingEnabled": true,
+  "alwaysThinkingEnabled": true{{- if eq .chezmoi.os "darwin" }},
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -82,4 +82,5 @@
       }
     ]
   }
+{{- end }}
 }
