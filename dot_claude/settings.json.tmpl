@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+{{- if .machine.is_work }}
+  "env": {
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "CLAUDE_CODE_SKIP_BEDROCK_AUTH": "1",
+    "ANTHROPIC_BEDROCK_BASE_URL": "{{ .claude.bedrock_url }}",
+    "ANTHROPIC_AUTH_TOKEN": "{{ .claude.auth_token }}"
+  },
+{{- end }}
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(export:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(git fetch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git log:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git reset --mixed:*)",
+      "Bash(git checkout:*)",
+      "Bash(git branch:*)",
+      "Bash(git rebase:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(go list:*)",
+      "Bash(go doc:*)",
+      "Bash(kubectl get:*)",
+      "Bash(kubectl logs:*)",
+      "Bash(go test:*)",
+      "Bash(go get:*)",
+      "Bash(go build:*)",
+      "Bash(glab issue view:*)",
+      "Bash(glab mr view:*)",
+      "Bash(glab mr create:*)",
+      "Read",
+      "WebFetch"
+    ],
+    "deny": [
+      "Bash(git reset --hard:*)"
+    ],
+    "defaultMode": "plan"
+  },
+  "enabledPlugins": {
+    "gitlab-pm@fleet-tools": true,
+    "code-reviewer@fleet-tools": true
+  },
+  "alwaysThinkingEnabled": true,
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/ccnotify/ccnotify.py UserPromptSubmit"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/ccnotify/ccnotify.py Stop"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/ccnotify/ccnotify.py Notification"
+          }
+        ]
+      }
+    ]
+  }
+}
