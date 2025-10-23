@@ -4,3 +4,6 @@
 {{- end }}
 
 CLAUDE.md
+
+# Work-specific Brewfile - keep local, never commit to git
+.Brewfile.work

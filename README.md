@@ -102,71 +102,23 @@ git push
 - **Tools**: Topgrade, Claude Code
 - **Package Management**: Homebrew Bundle with comprehensive Brewfile
 
-## Homebrew Bundle Management
+## Homebrew Bundle
 
-This dotfiles repository includes a comprehensive Brewfile that manages all CLI tools, GUI applications, and Mac App Store apps using Homebrew Bundle.
+Packages managed via Brewfile.
 
-### Automated Setup (macOS Only)
+### Setup
 
-When you run `chezmoi init --apply` on a new machine, it will automatically:
-1. Install Homebrew (if not already installed)
-2. Create `~/Brewfile` with all packages
-3. **Prompt you to install all packages** from the Brewfile
+New machine: `chezmoi init --apply` (auto-installs Homebrew and packages)
 
-The setup script (`run_once_after_setup-macos.sh.tmpl`) runs automatically once and handles everything.
+### Work-Specific Packages
 
-### Manual Setup or Re-sync
-
-To manually run the setup or sync packages on an existing machine:
-
+For work-only packages, create `~/.Brewfile.work` (NOT committed):
 ```bash
-# Re-run the complete setup
-cd $(chezmoi source-path) && bash run_once_after_setup-macos.sh.tmpl
-
-# Or use brew bundle directly for quick syncing
-brew bundle --global
+cp $(chezmoi source-path)/Brewfile.work.example ~/.Brewfile.work
+# Edit and add work packages
 ```
 
-### What's in the Brewfile?
-
-The Brewfile includes **250+ packages** organized into categories:
-- **Custom Taps**: 5 additional repositories
-- **Development Tools**: Go, Rust, Python, Node.js, Java + language-specific tooling
-- **Kubernetes/Cloud**: kubectl, helm, argocd, istio, minikube, k9s, and more
-- **System Utilities**: Modern CLI tools (bat, ripgrep, fd, fzf, etc.)
-- **Media Tools**: FFmpeg with codecs, ImageMagick, video/audio processing
-- **Security Tools**: GPG, SSH utilities, certificate management
-- **GUI Applications**: Development tools, browsers, communication apps (60+ apps)
-- **Mac App Store**: AdGuard, PowerPoint, Okta Verify, and more
-
-### Common Tasks
-
-```bash
-# Sync packages from Brewfile
-brew bundle --global
-
-# Update Brewfile after installing new packages manually
-brew bundle dump --force --global
-
-# Find packages not in Brewfile (cleanup candidates)
-brew bundle cleanup --global
-
-# Remove packages not in Brewfile
-brew bundle cleanup --force --global
-```
-
-### Syncing Across Machines
-
-1. **New machine**: Run `chezmoi init --apply <github-username>` - setup runs automatically
-2. **Existing machine**: Run `chezmoi apply` to update Brewfile, then `brew bundle --global` to sync
-3. **Keep in sync**: Regularly run `brew bundle --global` on all machines
-
-### Best Practices
-
-1. **After installing new packages**: Run `brew bundle dump --force --global` to update your Brewfile
-2. **Regular syncing**: Run `brew bundle --global` periodically to keep machines in sync
-3. **Cleanup**: Use `brew bundle cleanup --global` to find unused packages
-4. **Keep it organized**: The Brewfile has comments and categories - try to maintain them when adding packages manually
+Setup script installs from both files automatically.
 
 ## Platform Support
 

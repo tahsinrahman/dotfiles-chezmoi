@@ -60,11 +60,12 @@ echo -e "${GREEN}✅ Homebrew Bundle ready${NC}"
 echo ""
 
 # ============================================================================
-# Step 3: Check for Brewfile
+# Step 3: Check for Brewfile(s)
 # ============================================================================
 
-echo -e "${BLUE}[3/4] Checking for Brewfile...${NC}"
+echo -e "${BLUE}[3/4] Checking for Brewfile(s)...${NC}"
 BREWFILE="$HOME/Brewfile"
+BREWFILE_WORK="$HOME/.Brewfile.work"
 
 if [[ ! -f "$BREWFILE" ]]; then
     echo -e "${RED}❌ Brewfile not found at $BREWFILE${NC}"
@@ -73,10 +74,20 @@ if [[ ! -f "$BREWFILE" ]]; then
 fi
 
 echo -e "${GREEN}✅ Found Brewfile at $BREWFILE${NC}"
+
+# Check for work-specific Brewfile
+HAS_WORK_BREWFILE=false
+if [[ -f "$BREWFILE_WORK" ]]; then
+    echo -e "${GREEN}✅ Found work Brewfile at $BREWFILE_WORK${NC}"
+    HAS_WORK_BREWFILE=true
+else
+    echo -e "${BLUE}ℹ️  No work Brewfile found (optional)${NC}"
+    echo -e "${BLUE}   To add work-specific packages, create ~/.Brewfile.work${NC}"
+fi
 echo ""
 
-# Show summary
-echo -e "${BLUE}📋 Brewfile Summary:${NC}"
+# Show summary for personal Brewfile
+echo -e "${BLUE}📋 Personal Brewfile Summary:${NC}"
 TAPS=$(grep -c '^tap ' "$BREWFILE" || echo 0)
 FORMULAE=$(grep -c '^brew ' "$BREWFILE" || echo 0)
 CASKS=$(grep -c '^cask ' "$BREWFILE" || echo 0)
@@ -88,15 +99,36 @@ echo "   Casks:        $CASKS"
 echo "   Mac Apps:     $MAS"
 echo "   ─────────────────"
 echo "   Total:        $((TAPS + FORMULAE + CASKS + MAS)) packages"
+
+# Show summary for work Brewfile if it exists
+if [[ "$HAS_WORK_BREWFILE" == true ]]; then
+    echo ""
+    echo -e "${BLUE}📋 Work Brewfile Summary:${NC}"
+    WORK_TAPS=$(grep -c '^tap ' "$BREWFILE_WORK" || echo 0)
+    WORK_FORMULAE=$(grep -c '^brew ' "$BREWFILE_WORK" || echo 0)
+    WORK_CASKS=$(grep -c '^cask ' "$BREWFILE_WORK" || echo 0)
+    WORK_MAS=$(grep -c '^mas ' "$BREWFILE_WORK" || echo 0)
+
+    echo "   Taps:         $WORK_TAPS"
+    echo "   Formulae:     $WORK_FORMULAE"
+    echo "   Casks:        $WORK_CASKS"
+    echo "   Mac Apps:     $WORK_MAS"
+    echo "   ─────────────────"
+    echo "   Total:        $((WORK_TAPS + WORK_FORMULAE + WORK_CASKS + WORK_MAS)) packages"
+fi
 echo ""
 
 # ============================================================================
-# Step 4: Install packages from Brewfile
+# Step 4: Install packages from Brewfile(s)
 # ============================================================================
 
-echo -e "${BLUE}[4/4] Installing packages from Brewfile...${NC}"
+echo -e "${BLUE}[4/4] Installing packages from Brewfile(s)...${NC}"
 echo ""
-echo -e "${YELLOW}⚠️  This will install/update all packages from the Brewfile${NC}"
+if [[ "$HAS_WORK_BREWFILE" == true ]]; then
+    echo -e "${YELLOW}⚠️  This will install/update packages from both personal and work Brewfiles${NC}"
+else
+    echo -e "${YELLOW}⚠️  This will install/update all packages from the Brewfile${NC}"
+fi
 echo -e "${YELLOW}   This may take 10-30 minutes depending on what's already installed${NC}"
 echo ""
 
@@ -109,23 +141,41 @@ if [[ -t 0 ]]; then
         echo ""
         echo -e "${BLUE}💡 To install packages later, run:${NC}"
         echo "   brew bundle --global"
-        echo "   # or: brew bundle --file ~/Brewfile"
+        if [[ "$HAS_WORK_BREWFILE" == true ]]; then
+            echo "   brew bundle --file ~/.Brewfile.work"
+        fi
         exit 0
     fi
 fi
 
 echo ""
-echo -e "${BLUE}📦 Installing/updating packages...${NC}"
+echo -e "${BLUE}📦 Installing/updating packages from personal Brewfile...${NC}"
 echo ""
 
-# Install packages
+# Install packages from personal Brewfile
 if brew bundle --file="$BREWFILE" --no-lock; then
     echo ""
-    echo -e "${GREEN}✅ Package installation complete!${NC}"
+    echo -e "${GREEN}✅ Personal packages installation complete!${NC}"
 else
     echo ""
-    echo -e "${YELLOW}⚠️  Some packages may have failed to install${NC}"
+    echo -e "${YELLOW}⚠️  Some personal packages may have failed to install${NC}"
     echo -e "${BLUE}💡 This is usually okay - check the output above for details${NC}"
+fi
+
+# Install packages from work Brewfile if it exists
+if [[ "$HAS_WORK_BREWFILE" == true ]]; then
+    echo ""
+    echo -e "${BLUE}📦 Installing/updating packages from work Brewfile...${NC}"
+    echo ""
+
+    if brew bundle --file="$BREWFILE_WORK" --no-lock; then
+        echo ""
+        echo -e "${GREEN}✅ Work packages installation complete!${NC}"
+    else
+        echo ""
+        echo -e "${YELLOW}⚠️  Some work packages may have failed to install${NC}"
+        echo -e "${BLUE}💡 This is usually okay - check the output above for details${NC}"
+    fi
 fi
 
 echo ""
@@ -159,16 +209,26 @@ echo -e "${BOLD}${GREEN}╚═════════════════�
 echo ""
 echo -e "${BLUE}💡 Useful commands:${NC}"
 echo ""
-echo -e "  ${BOLD}Sync packages:${NC}"
+echo -e "  ${BOLD}Sync personal packages:${NC}"
 echo "    brew bundle --global"
 echo ""
-echo -e "  ${BOLD}Update Brewfile after installing new packages:${NC}"
+if [[ "$HAS_WORK_BREWFILE" == true ]]; then
+    echo -e "  ${BOLD}Sync work packages:${NC}"
+    echo "    brew bundle --file ~/.Brewfile.work"
+    echo ""
+fi
+echo -e "  ${BOLD}Update personal Brewfile after installing new packages:${NC}"
 echo "    brew bundle dump --force --global"
 echo ""
-echo -e "  ${BOLD}Find packages not in Brewfile:${NC}"
+if [[ "$HAS_WORK_BREWFILE" == true ]]; then
+    echo -e "  ${BOLD}Update work Brewfile:${NC}"
+    echo "    brew bundle dump --force --file ~/.Brewfile.work"
+    echo ""
+fi
+echo -e "  ${BOLD}Find packages not in Brewfiles:${NC}"
 echo "    brew bundle cleanup --global"
 echo ""
-echo -e "  ${BOLD}Remove packages not in Brewfile:${NC}"
+echo -e "  ${BOLD}Remove packages not in Brewfiles:${NC}"
 echo "    brew bundle cleanup --force --global"
 echo ""
 echo -e "  ${BOLD}Re-run this setup:${NC}"

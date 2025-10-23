@@ -1,0 +1,43 @@
+# Brewfile.work.example
+# This is an EXAMPLE work-specific Brewfile
+#
+# To use on your work machine:
+# 1. Copy this file to ~/.Brewfile.work (NOT in chezmoi, NOT committed to git)
+# 2. Edit ~/.Brewfile.work with your actual work-specific packages
+# 3. The setup script will automatically install from both ~/Brewfile and ~/.Brewfile.work
+#
+# IMPORTANT: ~/.Brewfile.work should NEVER be added to chezmoi or committed to git
+
+# ============================================================================
+# WORK-SPECIFIC CLI TOOLS
+# ============================================================================
+
+# Authentication & Access
+brew "kubectl-login"              # kubectl credential plugin for work clusters
+brew "ssh-login"                  # SSH login helper for work infrastructure
+
+# Work-specific cloud/k8s tools can go here
+# brew "your-company-cli"         # Company-specific CLI tools
+
+# ============================================================================
+# WORK-SPECIFIC GUI APPLICATIONS
+# ============================================================================
+
+# Security & Authentication
+cask "vip-access"                 # Symantec VIP Access for 2FA
+
+# ============================================================================
+# WORK-SPECIFIC MAC APP STORE APPS
+# ============================================================================
+
+mas "Okta Verify", id: 490179405  # Work SSO authentication
+mas "Windows App", id: 1295203466 # Remote desktop for work Windows machines
+
+# ============================================================================
+# OPTIONAL: Add any other work-specific tools below
+# ============================================================================
+
+# Examples:
+# brew "awscli"                    # If your company uses AWS
+# cask "microsoft-teams"           # If required for work
+# cask "slack"                     # Work Slack workspace
