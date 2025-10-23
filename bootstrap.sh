@@ -100,15 +100,8 @@ echo ""
 
 # 7. Install Homebrew packages from Brewfile
 echo "📦 Installing Homebrew packages..."
-if [[ -f ~/Brewfile ]]; then
-    echo "Found Brewfile, installing packages..."
-    brew bundle --global
-    echo "✅ Packages installed"
-else
-    echo "⚠️  No Brewfile found at ~/Brewfile"
-    echo "Checking chezmoi source..."
-    ls -la $(chezmoi source-path)/ | grep -i brew || true
-fi
+brew bundle --global
+echo "✅ Packages installed"
 
 echo ""
 echo "🎉 Bootstrap complete!"
