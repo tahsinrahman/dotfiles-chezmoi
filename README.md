@@ -7,11 +7,16 @@ Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/).
 ### New Machine Setup
 
 ```bash
-# Install chezmoi and apply dotfiles
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply <your-github-username>
+# 1. Download and run bootstrap script
+curl -fsSL https://raw.githubusercontent.com/<username>/dotfiles/main/bootstrap.sh | bash
 
-# Or if repo is already cloned
-chezmoi init --apply ~/.local/share/chezmoi
+# Or manually:
+# - Installs Homebrew
+# - Generates SSH key
+# - Installs chezmoi
+# - Clones your dotfiles
+# - Applies configs
+# - Optionally installs packages
 ```
 
 ### Configure Machine-Specific Data
