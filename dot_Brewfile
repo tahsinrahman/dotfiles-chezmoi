@@ -7,7 +7,6 @@
 # TAPS - Custom Homebrew Repositories
 # ============================================================================
 
-tap "homebrew/services"          # Manage services with `brew services`
 tap "nikitabobko/tap"            # AeroSpace window manager
 
 # ============================================================================
