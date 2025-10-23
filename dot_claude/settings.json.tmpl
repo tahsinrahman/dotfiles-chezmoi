@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-{{- if .machine.is_work }}
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
   "env": {
     "CLAUDE_CODE_USE_BEDROCK": "1",
     "CLAUDE_CODE_SKIP_BEDROCK_AUTH": "1",
