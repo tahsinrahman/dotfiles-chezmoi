@@ -52,7 +52,21 @@ fi
 
 echo ""
 
-# 4. Initialize chezmoi with dotfiles repo
+# 4. Create chezmoi config
+echo "⚙️  Creating chezmoi config..."
+mkdir -p ~/.config/chezmoi
+cat > ~/.config/chezmoi/chezmoi.toml <<EOF
+[data.machine]
+    is_work = false
+
+[data.git]
+    email = "$(git config --global user.email || echo "user@example.com")"
+    name = "$(git config --global user.name || echo "Your Name")"
+EOF
+echo "✅ chezmoi config created"
+echo ""
+
+# 5. Initialize chezmoi with dotfiles repo
 echo "📂 Initialize chezmoi..."
 DOTFILES_REPO="git@github.com:tahsinrahman/dotfiles-chezmoi.git"
 
@@ -60,13 +74,13 @@ chezmoi init "$DOTFILES_REPO"
 echo "✅ chezmoi initialized"
 echo ""
 
-# 5. Apply dotfiles
+# 6. Apply dotfiles
 echo "📝 Applying dotfiles..."
 chezmoi apply
 echo "✅ Dotfiles applied"
 echo ""
 
-# 6. Install Homebrew packages from Brewfile
+# 7. Install Homebrew packages from Brewfile
 echo "📦 Installing Homebrew packages..."
 if [[ -f ~/Brewfile ]]; then
     brew bundle --global --no-lock
