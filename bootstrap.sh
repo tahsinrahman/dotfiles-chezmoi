@@ -66,14 +66,13 @@ chezmoi apply
 echo "✅ Dotfiles applied"
 echo ""
 
-# 6. Run the Homebrew setup (optional)
-if [[ -f "$(chezmoi source-path)/run_once_after_setup-macos.sh" ]]; then
-    echo "📦 Install Homebrew packages?"
-    read -p "This will install all packages from Brewfile (y/N): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        bash "$(chezmoi source-path)/run_once_after_setup-macos.sh"
-    fi
+# 6. Install Homebrew packages from Brewfile
+echo "📦 Installing Homebrew packages..."
+if [[ -f ~/Brewfile ]]; then
+    brew bundle --global --no-lock
+    echo "✅ Packages installed"
+else
+    echo "⚠️  No Brewfile found, skipping package installation"
 fi
 
 echo ""
