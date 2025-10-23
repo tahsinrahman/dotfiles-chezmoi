@@ -1,0 +1,37 @@
+#!/bin/bash
+# run_once_before_install-homebrew.sh
+# This script ensures Homebrew is installed before chezmoi applies dotfiles
+# It runs once and only on macOS systems
+
+{{- if eq .chezmoi.os "darwin" }}
+
+set -e
+
+echo "🍺 Checking Homebrew installation..."
+
+# Check if Homebrew is installed
+if ! command -v brew &> /dev/null; then
+    echo "📦 Homebrew not found. Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Add Homebrew to PATH for Apple Silicon Macs
+    if [[ $(uname -m) == "arm64" ]]; then
+        echo "🔧 Adding Homebrew to PATH for Apple Silicon..."
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+else
+    echo "✅ Homebrew is already installed"
+fi
+
+# Ensure brew bundle command is available
+if ! brew tap | grep -q "homebrew/bundle"; then
+    echo "📦 Installing homebrew-bundle..."
+    brew tap homebrew/bundle
+fi
+
+echo "✅ Homebrew setup complete!"
+
+{{- else }}
+echo "⏭️  Skipping Homebrew installation (not macOS)"
+{{- end }}
