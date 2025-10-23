@@ -101,7 +101,7 @@ echo ""
 # 7. Install Homebrew packages from Brewfile
 echo "📦 Installing Homebrew packages..."
 if [[ -f ~/Brewfile ]]; then
-    brew bundle --global --no-lock
+    brew bundle --global
     echo "✅ Packages installed"
 else
     echo "⚠️  No Brewfile found, skipping package installation"
