@@ -106,55 +106,25 @@ git push
 
 This dotfiles repository includes a comprehensive Brewfile that manages all CLI tools, GUI applications, and Mac App Store apps using Homebrew Bundle.
 
-### Initial Setup (macOS Only)
+### Automated Setup (macOS Only)
 
-When you run `chezmoi init --apply`, it will automatically:
+When you run `chezmoi init --apply` on a new machine, it will automatically:
 1. Install Homebrew (if not already installed)
 2. Create `~/Brewfile` with all packages
-3. Set up helper scripts for package management
+3. **Prompt you to install all packages** from the Brewfile
 
-### Install/Update All Packages
+The setup script (`run_once_after_setup-macos.sh.tmpl`) runs automatically once and handles everything.
 
-To install or update all packages from the Brewfile:
+### Manual Setup or Re-sync
 
-```bash
-# Option 1: Run the sync script (recommended)
-cd $(chezmoi source-path) && ./scripts/brew-sync.sh
-
-# Option 2: Use brew bundle directly
-brew bundle --global  # or: brew bundle --file ~/Brewfile
-```
-
-The sync script provides:
-- Summary of packages to be installed
-- Interactive confirmation
-- Optional cleanup of old versions
-- Colored output with progress
-
-### Update Brewfile After Installing New Packages
-
-After manually installing new packages with `brew install` or `brew install --cask`, update your Brewfile:
+To manually run the setup or sync packages on an existing machine:
 
 ```bash
-cd $(chezmoi source-path) && ./scripts/brew-update-brewfile.sh
-```
+# Re-run the complete setup
+cd $(chezmoi source-path) && bash run_once_after_setup-macos.sh.tmpl
 
-**Note:** The auto-generated Brewfile will be plain and lose the current organization/comments. Consider manually adding new packages to keep the organized structure.
-
-### Managing Packages
-
-```bash
-# Check what's in the Brewfile
-brew bundle list --global
-
-# Find packages not in Brewfile (cleanup candidates)
-brew bundle cleanup --global
-
-# Remove packages not in Brewfile
-brew bundle cleanup --force --global
-
-# Check if Brewfile is satisfied
-brew bundle check --global
+# Or use brew bundle directly for quick syncing
+brew bundle --global
 ```
 
 ### What's in the Brewfile?
@@ -169,18 +139,34 @@ The Brewfile includes **250+ packages** organized into categories:
 - **GUI Applications**: Development tools, browsers, communication apps (60+ apps)
 - **Mac App Store**: AdGuard, PowerPoint, Okta Verify, and more
 
+### Common Tasks
+
+```bash
+# Sync packages from Brewfile
+brew bundle --global
+
+# Update Brewfile after installing new packages manually
+brew bundle dump --force --global
+
+# Find packages not in Brewfile (cleanup candidates)
+brew bundle cleanup --global
+
+# Remove packages not in Brewfile
+brew bundle cleanup --force --global
+```
+
 ### Syncing Across Machines
 
-1. **New machine**: Run `chezmoi init --apply` - Brewfile will be created and you can choose to install packages
-2. **Existing machine**: Run `chezmoi apply` to update Brewfile, then `brew bundle --global` to sync packages
-3. **Keep machines in sync**: Regularly run the sync script or `brew bundle --global`
+1. **New machine**: Run `chezmoi init --apply <github-username>` - setup runs automatically
+2. **Existing machine**: Run `chezmoi apply` to update Brewfile, then `brew bundle --global` to sync
+3. **Keep in sync**: Regularly run `brew bundle --global` on all machines
 
 ### Best Practices
 
-1. **Keep Brewfile in version control**: Already done - it's in your chezmoi repo
-2. **Regular updates**: Run `brew bundle --global` periodically to keep packages in sync
-3. **Remove old packages**: Use `brew bundle cleanup` to find packages not in your Brewfile
-4. **Manual package installation**: After `brew install foo`, remember to update the Brewfile
+1. **After installing new packages**: Run `brew bundle dump --force --global` to update your Brewfile
+2. **Regular syncing**: Run `brew bundle --global` periodically to keep machines in sync
+3. **Cleanup**: Use `brew bundle cleanup --global` to find unused packages
+4. **Keep it organized**: The Brewfile has comments and categories - try to maintain them when adding packages manually
 
 ## Platform Support
 
