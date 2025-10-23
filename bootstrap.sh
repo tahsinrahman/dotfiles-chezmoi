@@ -56,15 +56,16 @@ fi
 
 echo ""
 
-# 4. Create chezmoi config
-echo "⚙️  Creating chezmoi config..."
-echo ""
-read -p "Enter your name: " user_name
-read -p "Enter your email: " user_email
-echo ""
+# 4. Create chezmoi config (if not exists)
+if [[ ! -f ~/.config/chezmoi/chezmoi.toml ]]; then
+    echo "⚙️  Creating chezmoi config..."
+    echo ""
+    read -p "Enter your name: " user_name
+    read -p "Enter your email: " user_email
+    echo ""
 
-mkdir -p ~/.config/chezmoi
-cat > ~/.config/chezmoi/chezmoi.toml <<EOF
+    mkdir -p ~/.config/chezmoi
+    cat > ~/.config/chezmoi/chezmoi.toml <<EOF
 [data.machine]
     is_work = false
 
@@ -72,30 +73,39 @@ cat > ~/.config/chezmoi/chezmoi.toml <<EOF
     email = "$user_email"
     name = "$user_name"
 EOF
-echo "✅ chezmoi config created"
+    echo "✅ chezmoi config created"
+else
+    echo "✅ chezmoi config already exists"
+fi
 echo ""
 
-# 5. Initialize chezmoi with dotfiles repo
-echo "📂 Initialize chezmoi..."
-DOTFILES_REPO="git@github.com:tahsinrahman/dotfiles-chezmoi.git"
-
-chezmoi init "$DOTFILES_REPO"
-echo "✅ chezmoi initialized"
+# 5. Initialize chezmoi with dotfiles repo (if not already done)
+if [[ ! -d ~/.local/share/chezmoi/.git ]]; then
+    echo "📂 Initialize chezmoi..."
+    DOTFILES_REPO="git@github.com:tahsinrahman/dotfiles-chezmoi.git"
+    chezmoi init "$DOTFILES_REPO"
+    echo "✅ chezmoi initialized"
+else
+    echo "✅ chezmoi already initialized"
+fi
 echo ""
 
 # 6. Apply dotfiles
 echo "📝 Applying dotfiles..."
-chezmoi apply
+chezmoi apply -v
 echo "✅ Dotfiles applied"
 echo ""
 
 # 7. Install Homebrew packages from Brewfile
 echo "📦 Installing Homebrew packages..."
 if [[ -f ~/Brewfile ]]; then
+    echo "Found Brewfile, installing packages..."
     brew bundle --global
     echo "✅ Packages installed"
 else
-    echo "⚠️  No Brewfile found, skipping package installation"
+    echo "⚠️  No Brewfile found at ~/Brewfile"
+    echo "Checking chezmoi source..."
+    ls -la $(chezmoi source-path)/ | grep -i brew || true
 fi
 
 echo ""
