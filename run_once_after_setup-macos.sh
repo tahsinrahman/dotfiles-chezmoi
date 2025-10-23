@@ -1,12 +1,16 @@
 #!/bin/bash
 # run_once_after_setup-macos.sh
-# Comprehensive macOS setup script
-# This script runs once after chezmoi applies dotfiles
-# It can also be run manually anytime to sync packages: chezmoi cd && bash run_once_after_setup-macos.sh.tmpl
-
-{{- if eq .chezmoi.os "darwin" }}
+# macOS setup script - installs Homebrew and packages
+# Runs once after chezmoi applies dotfiles
+# Can also be run manually: chezmoi cd && bash run_once_after_setup-macos.sh
 
 set -e
+
+# Only run on macOS
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    echo "⏭️  Skipping macOS setup (not running on macOS)"
+    exit 0
+fi
 
 # Color output
 RED='\033[0;31m'
@@ -232,9 +236,5 @@ echo -e "  ${BOLD}Remove packages not in Brewfiles:${NC}"
 echo "    brew bundle cleanup --force --global"
 echo ""
 echo -e "  ${BOLD}Re-run this setup:${NC}"
-echo "    cd \$(chezmoi source-path) && bash run_once_after_setup-macos.sh.tmpl"
+echo "    cd \$(chezmoi source-path) && bash run_once_after_setup-macos.sh"
 echo ""
-
-{{- else }}
-echo "⏭️  Skipping macOS setup (not running on macOS)"
-{{- end }}
