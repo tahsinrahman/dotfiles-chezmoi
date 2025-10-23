@@ -52,32 +52,28 @@ fi
 
 echo ""
 
-# 4. Initialize chezmoi with your dotfiles repo
+# 4. Initialize chezmoi with dotfiles repo
 echo "📂 Initialize chezmoi..."
-read -p "Enter your dotfiles repo URL (e.g., git@github.com:username/dotfiles.git): " repo_url
+DOTFILES_REPO="git@github.com:tahsinrahman/dotfiles-chezmoi.git"
 
-if [[ -n "$repo_url" ]]; then
-    chezmoi init "$repo_url"
-    echo "✅ chezmoi initialized"
-    echo ""
+chezmoi init "$DOTFILES_REPO"
+echo "✅ chezmoi initialized"
+echo ""
 
-    # 5. Apply dotfiles
-    echo "📝 Applying dotfiles..."
-    chezmoi apply
-    echo "✅ Dotfiles applied"
-    echo ""
+# 5. Apply dotfiles
+echo "📝 Applying dotfiles..."
+chezmoi apply
+echo "✅ Dotfiles applied"
+echo ""
 
-    # 6. Run the Homebrew setup (optional)
-    if [[ -f "$(chezmoi source-path)/run_once_after_setup-macos.sh" ]]; then
-        echo "📦 Install Homebrew packages?"
-        read -p "This will install all packages from Brewfile (y/N): " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            bash "$(chezmoi source-path)/run_once_after_setup-macos.sh"
-        fi
+# 6. Run the Homebrew setup (optional)
+if [[ -f "$(chezmoi source-path)/run_once_after_setup-macos.sh" ]]; then
+    echo "📦 Install Homebrew packages?"
+    read -p "This will install all packages from Brewfile (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        bash "$(chezmoi source-path)/run_once_after_setup-macos.sh"
     fi
-else
-    echo "⚠️  No repo URL provided, skipping chezmoi init"
 fi
 
 echo ""
