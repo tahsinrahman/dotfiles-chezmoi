@@ -12,15 +12,28 @@ echo ""
 if ! command -v brew &> /dev/null; then
     echo "📦 Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    # Add to PATH for Apple Silicon
-    if [[ $(uname -m) == "arm64" ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
     echo "✅ Homebrew installed"
-else
-    echo "✅ Homebrew already installed"
 fi
+
+# Add Homebrew to PATH (idempotent)
+if [[ $(uname -m) == "arm64" ]]; then
+    BREW_PATH="/opt/homebrew/bin/brew"
+else
+    BREW_PATH="/usr/local/bin/brew"
+fi
+
+# Eval for current session
+eval "$($BREW_PATH shellenv)"
+
+# Add to shell RC files if not already present
+for rc_file in ~/.bashrc ~/.zshrc; do
+    if [[ -f "$rc_file" ]] && ! grep -q "brew shellenv" "$rc_file"; then
+        echo "" >> "$rc_file"
+        echo "# Homebrew" >> "$rc_file"
+        echo "eval \"\$($BREW_PATH shellenv)\"" >> "$rc_file"
+        echo "✅ Added Homebrew to $rc_file"
+    fi
+done
 
 echo ""
 
