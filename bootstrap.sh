@@ -54,14 +54,19 @@ echo ""
 
 # 4. Create chezmoi config
 echo "⚙️  Creating chezmoi config..."
+echo ""
+read -p "Enter your name: " user_name
+read -p "Enter your email: " user_email
+echo ""
+
 mkdir -p ~/.config/chezmoi
 cat > ~/.config/chezmoi/chezmoi.toml <<EOF
 [data.machine]
     is_work = false
 
 [data.git]
-    email = "$(git config --global user.email || echo "user@example.com")"
-    name = "$(git config --global user.name || echo "Your Name")"
+    email = "$user_email"
+    name = "$user_name"
 EOF
 echo "✅ chezmoi config created"
 echo ""
