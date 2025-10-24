@@ -74,13 +74,19 @@ if [[ ! -f ~/.config/chezmoi/chezmoi.toml ]]; then
     if [[ "$is_work_input" == "y" || "$is_work_input" == "yes" ]]; then
         is_work="true"
         echo "🏢 Setting up as WORK machine"
+        echo ""
+        read -p "Enter your GitLab domain (e.g., gitlab.company.com): " gitlab_domain
+        read -p "Enter your GitLab personal access token: " gitlab_token
+        echo ""
     else
         is_work="false"
         echo "🏠 Setting up as PERSONAL machine"
+        echo ""
     fi
-    echo ""
 
     mkdir -p ~/.config/chezmoi
+
+    # Create base config
     cat > ~/.config/chezmoi/chezmoi.toml <<EOF
 [data.machine]
     is_work = $is_work
@@ -89,6 +95,19 @@ if [[ ! -f ~/.config/chezmoi/chezmoi.toml ]]; then
     email = "$user_email"
     name = "$user_name"
 EOF
+
+    # Add work-specific config if this is a work machine
+    if [[ "$is_work" == "true" ]]; then
+        cat >> ~/.config/chezmoi/chezmoi.toml <<EOF
+
+[data.git.work]
+    gitlab_domain = "$gitlab_domain"
+
+[data.git.credential]
+    token = "$gitlab_token"
+EOF
+    fi
+
     echo "✅ chezmoi config created"
 else
     echo "✅ chezmoi config already exists"
@@ -120,118 +139,7 @@ brew bundle --global
 echo "✅ Packages installed"
 
 echo ""
-
-# 8. Work machine specific setup
-if [[ "$is_work" == "true" ]]; then
-    echo "🏢 Work Machine Setup"
-    echo "====================="
-    echo ""
-
-    # 8a. Setup ~/.gitconfig.work
-    if [[ ! -f ~/.gitconfig.work ]]; then
-        echo "⚙️  Setting up work Git configuration..."
-        echo ""
-        echo "📋 Example template available at:"
-        echo "   ~/.local/share/chezmoi/.gitconfig.work.example"
-        echo ""
-        read -p "Enter your GitLab domain (e.g., gitlab.company.com): " gitlab_domain
-        read -p "Enter your GitLab personal access token: " gitlab_token
-        echo ""
-
-        cat > ~/.gitconfig.work <<EOF
-[url "git@${gitlab_domain}:"]
-	insteadOf = https://${gitlab_domain}
-
-[credential]
-	helper = "!f() { sleep 1; echo \"username=token\"; echo \"password=${gitlab_token}\"; }; f"
-EOF
-        chmod 600 ~/.gitconfig.work
-        echo "✅ ~/.gitconfig.work created"
-    else
-        echo "✅ ~/.gitconfig.work already exists"
-    fi
-    echo ""
-
-    # 8b. Setup ~/.ssh/config.work
-    if [[ ! -f ~/.ssh/config.work ]]; then
-        echo "⚙️  Setting up work SSH configuration..."
-        echo ""
-        echo "📝 Creating empty ~/.ssh/config.work"
-        echo "   Add your work SSH proxy configurations here"
-        echo ""
-        echo "   Example:"
-        echo "   Host *.internal.company.com"
-        echo "    ForwardAgent yes"
-        echo "    ProxyCommand ssh-login -h=%h -b=ssh.company.com:2222"
-        echo ""
-
-        mkdir -p ~/.ssh
-        touch ~/.ssh/config.work
-        chmod 600 ~/.ssh/config.work
-
-        read -p "Do you want to edit ~/.ssh/config.work now? (y/N): " edit_ssh
-        if [[ "$edit_ssh" =~ ^[Yy] ]]; then
-            ${EDITOR:-nano} ~/.ssh/config.work
-        fi
-        echo "✅ ~/.ssh/config.work created"
-    else
-        echo "✅ ~/.ssh/config.work already exists"
-    fi
-    echo ""
-
-    # 8c. Setup ~/.Brewfile.work
-    if [[ ! -f ~/.Brewfile.work ]]; then
-        echo "⚙️  Setting up work Brewfile..."
-        echo ""
-        echo "📋 Copying example template..."
-
-        if [[ -f ~/.local/share/chezmoi/Brewfile.work.example ]]; then
-            cp ~/.local/share/chezmoi/Brewfile.work.example ~/.Brewfile.work
-            echo "✅ ~/.Brewfile.work created from template"
-            echo ""
-            echo "📝 Please edit ~/.Brewfile.work to add your work-specific packages"
-
-            read -p "Do you want to edit ~/.Brewfile.work now? (y/N): " edit_brewfile
-            if [[ "$edit_brewfile" =~ ^[Yy] ]]; then
-                ${EDITOR:-nano} ~/.Brewfile.work
-            fi
-        else
-            touch ~/.Brewfile.work
-            echo "✅ ~/.Brewfile.work created (empty)"
-        fi
-        echo ""
-
-        # Ask if they want to install work packages now
-        read -p "Install work packages from ~/.Brewfile.work? (y/N): " install_work
-        if [[ "$install_work" =~ ^[Yy] ]]; then
-            echo "📦 Installing work packages..."
-            brew bundle --file=~/.Brewfile.work
-            echo "✅ Work packages installed"
-        else
-            echo "⏭️  Skipping work package installation"
-            echo "   Run 'brew bundle --file=~/.Brewfile.work' later to install"
-        fi
-    else
-        echo "✅ ~/.Brewfile.work already exists"
-        echo ""
-        read -p "Update work packages from ~/.Brewfile.work? (y/N): " update_work
-        if [[ "$update_work" =~ ^[Yy] ]]; then
-            echo "📦 Updating work packages..."
-            brew bundle --file=~/.Brewfile.work
-            echo "✅ Work packages updated"
-        fi
-    fi
-    echo ""
-
-    echo "🎉 Work machine setup complete!"
-    echo ""
-    echo "📝 Work-specific files created:"
-    echo "   - ~/.gitconfig.work (Git credentials & URL rewrites)"
-    echo "   - ~/.ssh/config.work (SSH proxy configurations)"
-    echo "   - ~/.Brewfile.work (Work-specific packages)"
-    echo ""
-fi
-
+echo "Note: Work machine setup (if configured) will run automatically during 'chezmoi apply'"
 echo ""
 echo "🎉 Bootstrap complete!"
 echo ""

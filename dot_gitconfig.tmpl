@@ -1,6 +1,7 @@
 [user]
 	email = {{ .git.email }}
 	name = {{ .git.name }}
+
 [core]
 	autocrlf = input
     pager = delta
@@ -12,6 +13,17 @@
 	side-by-side = true
 
 {{- if .machine.is_work }}
-[include]
-	path = ~/.gitconfig.work
+
+# Work-specific Git configuration
+{{- if and (hasKey .git "work") (hasKey .git.work "gitlab_domain") }}
+# Git URL rewrites for work GitLab
+[url "git@{{ .git.work.gitlab_domain }}:"]
+	insteadOf = https://{{ .git.work.gitlab_domain }}
+{{- end }}
+
+{{- if and (hasKey .git "credential") (hasKey .git.credential "token") }}
+# Credential helper with personal access token
+[credential]
+	helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ .git.credential.token }}\"; }; f"
+{{- end }}
 {{- end }}

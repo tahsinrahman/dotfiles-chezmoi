@@ -24,12 +24,11 @@ The script will:
 2. Generate SSH key (if needed)
 3. Install chezmoi
 4. Create chezmoi config (asks if work or personal machine)
+   - **Work machines**: Also collects GitLab domain and token
 5. Initialize and apply dotfiles
+   - **Work machines**: Automatically generates `~/.gitconfig.work` from template
+   - **Work machines**: Runs setup checker to create `~/.ssh/config.work` and `~/.Brewfile.work`
 6. Install Homebrew packages
-7. **Work machines only**: Set up work-specific configurations:
-   - `~/.gitconfig.work` - GitLab credentials and URL rewrites
-   - `~/.ssh/config.work` - SSH proxy configurations
-   - `~/.Brewfile.work` - Work-specific packages
 
 ## Working with Chezmoi
 
@@ -192,25 +191,16 @@ You can conditionally include configuration blocks based on machine type (work v
     email = "your.email@example.com"
     name = "Your Name"
 
+[data.git.work]
+    gitlab_domain = "gitlab.company.com"
+
 [data.git.credential]
-    token = "your-work-token"
+    token = "your-gitlab-personal-access-token"
 ```
 
-2. Use conditionals in your templates:
+2. Use conditionals in your templates to generate different configs:
 
-```gitconfig
-# In dot_gitconfig.tmpl
-[user]
-    email = {{ .git.email }}
-    name = {{ .git.name }}
-
-{{- if .machine.is_work }}
-[credential]
-    helper = "!f() { echo \"password={{ .git.credential.token }}\"; }; f"
-{{- end }}
-```
-
-On personal machines, set `is_work = false` in chezmoi.toml and the credential block won't be included.
+On work machines, chezmoi automatically generates `~/.gitconfig.work` from the template with your GitLab domain and token. On personal machines (where `is_work = false`), the file won't be created at all.
 
 **External work-specific configs (not committed):**
 
@@ -237,45 +227,89 @@ Host *.internal.company.com
 
 **Git Config Example:**
 
+Work GitLab credentials are **managed by chezmoi** directly in your main gitconfig:
+
+Single config file (`dot_gitconfig.tmpl`):
 ```gitconfig
-# In dot_gitconfig.tmpl
 [user]
     email = {{ .git.email }}
     name = {{ .git.name }}
 
+[core]
+    autocrlf = input
+    pager = delta
+
 {{- if .machine.is_work }}
-[include]
-    path = ~/.gitconfig.work
+
+# Work-specific Git configuration
+[url "git@{{ .git.work.gitlab_domain }}:"]
+    insteadOf = https://{{ .git.work.gitlab_domain }}
+
+[credential]
+    helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ .git.credential.token }}\"; }; f"
 {{- end }}
 ```
 
-Create work file locally (NOT managed by chezmoi):
-```bash
-# ~/.gitconfig.work
-[url "git@gitlab.company.com:"]
-    insteadOf = https://gitlab.company.com
+On work machines, the work-specific sections are automatically included. On personal machines (where `is_work = false`), they're omitted entirely.
 
-[credential]
-    helper = "!f() { echo \"password=YOUR_TOKEN\"; }; f"
-```
+**Benefits:**
+- ✅ Single file to manage - no separate work config
+- ✅ Token stored securely in one place (`~/.config/chezmoi/chezmoi.toml`)
+- ✅ Update token once, automatically reflected in `~/.gitconfig`
+- ✅ No risk of committing credentials (chezmoi.toml is never committed)
+- ✅ Simpler setup - one template file instead of two
 
-The conditional `{{- if .machine.is_work }}` ensures the include directive is only added on work machines. On personal machines (where `is_work = false` in chezmoi.toml), the include won't be present at all.
-
-See `.gitconfig.work.example` in the chezmoi source directory for a template.
+**To update your GitLab token:**
+1. Edit `~/.config/chezmoi/chezmoi.toml`
+2. Update the `token` value
+3. Run `chezmoi apply`
+4. Done! Your `~/.gitconfig` is automatically updated
 
 **Setting up on a new machine:**
 
-1. Clone and initialize chezmoi: `chezmoi init <your-repo-url>`
-2. Create `~/.config/chezmoi/chezmoi.toml` with your machine-specific data
-3. Apply configs: `chezmoi apply`
-4. *Work machines only:* Create work-specific configs:
-   - `~/.ssh/config.work` - Work SSH hosts
-   - `~/.gitconfig.work` - Work Git URL rewrites and credentials
+Use the bootstrap script (recommended):
+```bash
+git clone git@github.com:tahsinrahman/dotfiles-chezmoi.git ~/dotfiles-temp
+cd ~/dotfiles-temp
+bash bootstrap.sh
+```
+
+The bootstrap script will:
+- Install Homebrew and chezmoi
+- Ask if this is a work or personal machine
+- For work machines: collect GitLab domain and token
+- Create `~/.config/chezmoi/chezmoi.toml` with your settings
+- Apply all dotfiles (work config embedded in `~/.gitconfig` for work machines)
+- Install packages from Brewfile
+
+**Forgot to add work configs? No problem!**
+
+If you forgot to set up work configuration during bootstrap, or need to add it later:
+
+1. **Add missing config to chezmoi.toml**: Edit `~/.config/chezmoi/chezmoi.toml` and add:
+   ```toml
+   [data.git.work]
+       gitlab_domain = "gitlab.company.com"
+
+   [data.git.credential]
+       token = "your-token-here"
+   ```
+
+2. **Run chezmoi apply**: This will:
+   - Automatically add work GitLab config to your `~/.gitconfig`
+   - Run a check script that detects missing work files (like `~/.ssh/config.work`)
+   - Offer to create any missing files interactively
+
+3. **Switching from personal to work machine**:
+   - Edit `~/.config/chezmoi/chezmoi.toml` and set `is_work = true`
+   - Add the `[data.git.work]` and `[data.git.credential]` sections
+   - Run `chezmoi apply`
 
 **Files currently using templates:**
-- `dot_gitconfig.tmpl` - Git configuration with external work includes
+- `dot_gitconfig.tmpl` - Git configuration with embedded work config
 - `private_dot_ssh/private_config.tmpl` - SSH config with external work includes
 - `dot_config/fish/conf.d/init.fish.tmpl` - Fish shell with platform-specific paths
+- `run_once_after_10-check-work-configs.sh` - Automatic work config checker
 
 ### Testing Changes
 
