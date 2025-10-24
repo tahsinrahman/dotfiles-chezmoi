@@ -49,9 +49,17 @@ if [[ -f "$CHEZMOI_CONFIG" ]]; then
     else
         echo -e "${GREEN}✅ Found: token in chezmoi.toml${NC}"
     fi
+
+    # Check if api_key exists in [data.openai] section
+    if ! grep -A 10 "^\[data\.openai\]" "$CHEZMOI_CONFIG" 2>/dev/null | grep -q "api_key"; then
+        echo -e "${YELLOW}⚠️  Missing: api_key in [data.openai] section${NC}"
+        MISSING_CONFIG+=("openai_key")
+    else
+        echo -e "${GREEN}✅ Found: api_key in chezmoi.toml${NC}"
+    fi
 else
     echo -e "${RED}❌ Missing: ~/.config/chezmoi/chezmoi.toml${NC}"
-    MISSING_CONFIG+=("gitlab_domain" "token")
+    MISSING_CONFIG+=("gitlab_domain" "token" "openai_key")
 fi
 
 echo ""
@@ -98,12 +106,20 @@ if [[ ${#MISSING_CONFIG[@]} -gt 0 ]]; then
     if [[ " ${MISSING_CONFIG[@]} " =~ " token " ]]; then
         echo "    token = \"your-gitlab-token-here\"  # Your GitLab personal access token"
     fi
+
+    if [[ " ${MISSING_CONFIG[@]} " =~ " openai_key " ]]; then
+        echo ""
+        echo "[data.openai]"
+        echo "    api_key = \"your-openai-api-key\"  # Your OpenAI API key"
+    fi
     echo -e "${NC}"
 
     echo "After adding these values, run:"
     echo "  chezmoi apply"
     echo ""
-    echo "This will automatically add your work GitLab config to ~/.gitconfig"
+    echo "This will automatically:"
+    echo "  - Add your work GitLab config to ~/.gitconfig"
+    echo "  - Set up OpenAI environment variables in Fish shell"
     echo ""
 
     # Check if running interactively
@@ -209,13 +225,14 @@ fi
 echo ""
 echo -e "${GREEN}🎉 Work configuration setup complete!${NC}"
 echo ""
-echo "📝 Work-specific files:"
+echo "📝 Work-specific configurations:"
 echo "   - ~/.gitconfig (includes work GitLab config from chezmoi.toml)"
 echo "   - ~/.ssh/config.work (SSH proxy configurations)"
 echo "   - ~/.Brewfile.work (Work-specific packages)"
+echo "   - Fish shell environment (OPENAI_API_KEY and OPENAI_BASE_URL)"
 echo ""
-echo "💡 To update GitLab credentials:"
+echo "💡 To update credentials:"
 echo "   1. Edit ~/.config/chezmoi/chezmoi.toml"
 echo "   2. Run: chezmoi apply"
-echo "   3. Your ~/.gitconfig will be automatically updated"
+echo "   3. Restart your shell or run: source ~/.config/fish/conf.d/init.fish"
 echo ""

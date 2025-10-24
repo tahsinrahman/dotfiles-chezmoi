@@ -78,6 +78,8 @@ if [[ ! -f ~/.config/chezmoi/chezmoi.toml ]]; then
         read -p "Enter your GitLab domain (e.g., gitlab.company.com): " gitlab_domain
         read -p "Enter your GitLab personal access token: " gitlab_token
         echo ""
+        read -p "Enter your OpenAI API key: " openai_key
+        echo ""
     else
         is_work="false"
         echo "🏠 Setting up as PERSONAL machine"
@@ -101,6 +103,9 @@ EOF
         cat >> ~/.config/chezmoi/chezmoi.toml <<EOF
     gitlab_domain = "$gitlab_domain"
     token = "$gitlab_token"
+
+[data.openai]
+    api_key = "$openai_key"
 EOF
     fi
 

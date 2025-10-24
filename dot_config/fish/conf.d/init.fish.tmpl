@@ -20,6 +20,12 @@ set -gx PATH /opt/homebrew/sbin $PATH
 set -gx PATH /home/linuxbrew/.linuxbrew/bin $PATH
 {{- end }}
 
+{{- if .machine.is_work }}
+# Work-specific OpenAI configuration
+set -xg OPENAI_API_KEY "{{ .openai.api_key }}"
+set -xg OPENAI_BASE_URL "https://genai-gateway.agoda.is/v1"
+{{- end }}
+
 fish_hybrid_key_bindings
 
 atuin init fish --disable-up-arrow | source

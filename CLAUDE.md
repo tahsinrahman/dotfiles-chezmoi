@@ -24,10 +24,11 @@ The script will:
 2. Generate SSH key (if needed)
 3. Install chezmoi
 4. Create chezmoi config (asks if work or personal machine)
-   - **Work machines**: Also collects GitLab domain and token
+   - **Work machines**: Also collects GitLab domain, token, and OpenAI API key
 5. Initialize and apply dotfiles
    - **Work machines**: Automatically generates `~/.gitconfig.work` from template
    - **Work machines**: Runs setup checker to create `~/.ssh/config.work` and `~/.Brewfile.work`
+   - **Work machines**: Configures OpenAI environment variables in Fish shell
 6. Install Homebrew packages
 
 ## Working with Chezmoi
@@ -271,7 +272,7 @@ bash bootstrap.sh
 The bootstrap script will:
 - Install Homebrew and chezmoi
 - Ask if this is a work or personal machine
-- For work machines: collect GitLab domain and token
+- For work machines: collect GitLab domain, token, and OpenAI API key
 - Create `~/.config/chezmoi/chezmoi.toml` with your settings
 - Apply all dotfiles (work config embedded in `~/.gitconfig` for work machines)
 - Install packages from Brewfile
@@ -298,6 +299,32 @@ If you forgot to set up work configuration during bootstrap, or need to add it l
    - Edit `~/.config/chezmoi/chezmoi.toml` and set `is_work = true`
    - Add `gitlab_domain` and `token` to the `[data.git]` section
    - Run `chezmoi apply`
+
+**Work-specific OpenAI configuration:**
+
+For work machines that use an internal OpenAI gateway, environment variables are automatically configured in Fish shell. The bootstrap script will prompt for your OpenAI API key during setup.
+
+Configuration in `~/.config/chezmoi/chezmoi.toml`:
+```toml
+[data.machine]
+    is_work = true
+
+[data.openai]
+    api_key = "your-openai-api-key"
+```
+
+Environment variables set on work machines:
+- `OPENAI_API_KEY` - Your personal OpenAI API key (from chezmoi.toml)
+- `OPENAI_BASE_URL` - Internal gateway URL (hardcoded in template)
+
+To add OpenAI config to an existing work machine:
+1. Edit `~/.config/chezmoi/chezmoi.toml` and add:
+   ```toml
+   [data.openai]
+       api_key = "your-openai-api-key"
+   ```
+2. Run `chezmoi apply`
+3. Restart your Fish shell or run `source ~/.config/fish/conf.d/init.fish`
 
 **Files currently using templates:**
 - `dot_gitconfig.tmpl` - Git configuration with embedded work config

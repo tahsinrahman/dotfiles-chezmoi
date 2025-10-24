@@ -1,0 +1,81 @@
+#!/bin/bash
+# Ensure OpenAI API key is configured on work machines
+# This runs before chezmoi apply to prevent template failures
+
+{{- if .machine.is_work }}
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+CHEZMOI_CONFIG="$HOME/.config/chezmoi/chezmoi.toml"
+
+# Check if OpenAI API key is configured
+if [[ -f "$CHEZMOI_CONFIG" ]]; then
+    if grep -A 10 "^\[data\.openai\]" "$CHEZMOI_CONFIG" 2>/dev/null | grep -q "api_key"; then
+        # Key exists, all good
+        exit 0
+    fi
+fi
+
+# Key is missing - prompt for it
+echo -e "${YELLOW}⚠️  OpenAI API key not configured${NC}"
+echo ""
+echo "This is a work machine and requires an OpenAI API key for the internal gateway."
+echo ""
+
+# Check if running interactively
+if [[ ! -t 0 ]]; then
+    echo -e "${RED}❌ Error: OpenAI API key is required but stdin is not a terminal${NC}"
+    echo ""
+    echo "Please add the following to ~/.config/chezmoi/chezmoi.toml:"
+    echo ""
+    echo "[data.openai]"
+    echo "    api_key = \"your-openai-api-key\""
+    echo ""
+    exit 1
+fi
+
+# Prompt for the key
+echo -e "${BLUE}Please enter your OpenAI API key:${NC}"
+read -r openai_key
+
+if [[ -z "$openai_key" ]]; then
+    echo -e "${RED}❌ Error: OpenAI API key cannot be empty${NC}"
+    exit 1
+fi
+
+# Add to chezmoi.toml
+echo ""
+echo -e "${BLUE}Adding OpenAI API key to chezmoi.toml...${NC}"
+
+# Check if [data.openai] section exists
+if grep -q "^\[data\.openai\]" "$CHEZMOI_CONFIG" 2>/dev/null; then
+    # Section exists, add/update api_key
+    if grep -A 10 "^\[data\.openai\]" "$CHEZMOI_CONFIG" 2>/dev/null | grep -q "api_key"; then
+        # Update existing key
+        sed -i.bak "/^\[data\.openai\]/,/^\[/ s/api_key = .*/api_key = \"$openai_key\"/" "$CHEZMOI_CONFIG"
+    else
+        # Add key to existing section
+        sed -i.bak "/^\[data\.openai\]/a\\
+    api_key = \"$openai_key\"" "$CHEZMOI_CONFIG"
+    fi
+else
+    # Add new section
+    echo "" >> "$CHEZMOI_CONFIG"
+    echo "[data.openai]" >> "$CHEZMOI_CONFIG"
+    echo "    api_key = \"$openai_key\"" >> "$CHEZMOI_CONFIG"
+fi
+
+echo -e "${GREEN}✅ OpenAI API key saved to chezmoi.toml${NC}"
+echo ""
+
+{{- else }}
+# Not a work machine, nothing to do
+exit 0
+{{- end }}
