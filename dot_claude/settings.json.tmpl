@@ -10,12 +10,14 @@
 {{- end }}
   "permissions": {
     "allow": [
-      "Bash(grep:*)",
-      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(cd:*)",
       "Bash(export:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
       "Bash(mkdir:*)",
       "Bash(ls:*)",
-      "Bash(cat:*)",
+      "Bash(test:*)",
       "Bash(git fetch:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
@@ -24,6 +26,7 @@
       "Bash(git pull:*)",
       "Bash(git reset --mixed:*)",
       "Bash(git checkout:*)",
+      "Bash(git show:*)",
       "Bash(git branch:*)",
       "Bash(git rebase:*)",
       "Bash(git rev-parse:*)",
@@ -38,7 +41,9 @@
       "Bash(glab mr view:*)",
       "Bash(glab mr create:*)",
       "Read",
-      "WebFetch"
+      "WebFetch",
+      "Search",
+      "Grep"
     ],
     "deny": [
       "Bash(git reset --hard:*)"
@@ -46,8 +51,8 @@
     "defaultMode": "plan"
   },
   "enabledPlugins": {
-    "gitlab-pm@fleet-tools": true,
-    "code-reviewer@fleet-tools": true
+    "code-reviewer@fleet-tools": true,
+    "gitlab-pm@fleet-tools": true
   },
   "alwaysThinkingEnabled": true{{- if eq .chezmoi.os "darwin" }},
   "hooks": {
