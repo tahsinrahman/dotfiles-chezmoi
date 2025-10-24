@@ -99,11 +99,7 @@ EOF
     # Add work-specific config if this is a work machine
     if [[ "$is_work" == "true" ]]; then
         cat >> ~/.config/chezmoi/chezmoi.toml <<EOF
-
-[data.git.work]
     gitlab_domain = "$gitlab_domain"
-
-[data.git.credential]
     token = "$gitlab_token"
 EOF
     fi

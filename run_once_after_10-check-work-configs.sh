@@ -34,22 +34,20 @@ echo ""
 # Check chezmoi.toml for required work config
 CHEZMOI_CONFIG="$HOME/.config/chezmoi/chezmoi.toml"
 if [[ -f "$CHEZMOI_CONFIG" ]]; then
-    # Check if git.work.gitlab_domain exists
-    if ! grep -q "^\[data\.git\.work\]" "$CHEZMOI_CONFIG" 2>/dev/null || \
-       ! grep -q "gitlab_domain" "$CHEZMOI_CONFIG" 2>/dev/null; then
-        echo -e "${YELLOW}⚠️  Missing: git.work.gitlab_domain in chezmoi.toml${NC}"
+    # Check if gitlab_domain exists in [data.git] section
+    if ! grep -A 10 "^\[data\.git\]" "$CHEZMOI_CONFIG" 2>/dev/null | grep -q "gitlab_domain"; then
+        echo -e "${YELLOW}⚠️  Missing: gitlab_domain in [data.git] section${NC}"
         MISSING_CONFIG+=("gitlab_domain")
     else
-        echo -e "${GREEN}✅ Found: git.work.gitlab_domain in chezmoi.toml${NC}"
+        echo -e "${GREEN}✅ Found: gitlab_domain in chezmoi.toml${NC}"
     fi
 
-    # Check if git.credential.token exists
-    if ! grep -q "^\[data\.git\.credential\]" "$CHEZMOI_CONFIG" 2>/dev/null || \
-       ! grep -q "token" "$CHEZMOI_CONFIG" 2>/dev/null; then
-        echo -e "${YELLOW}⚠️  Missing: git.credential.token in chezmoi.toml${NC}"
+    # Check if token exists in [data.git] section
+    if ! grep -A 10 "^\[data\.git\]" "$CHEZMOI_CONFIG" 2>/dev/null | grep -q "token"; then
+        echo -e "${YELLOW}⚠️  Missing: token in [data.git] section${NC}"
         MISSING_CONFIG+=("token")
     else
-        echo -e "${GREEN}✅ Found: git.credential.token in chezmoi.toml${NC}"
+        echo -e "${GREEN}✅ Found: token in chezmoi.toml${NC}"
     fi
 else
     echo -e "${RED}❌ Missing: ~/.config/chezmoi/chezmoi.toml${NC}"
@@ -87,20 +85,20 @@ fi
 if [[ ${#MISSING_CONFIG[@]} -gt 0 ]]; then
     echo -e "${YELLOW}⚠️  Missing work configuration in chezmoi.toml${NC}"
     echo ""
-    echo "Please add the following to ~/.config/chezmoi/chezmoi.toml:"
+    echo "Please add the following to the [data.git] section in ~/.config/chezmoi/chezmoi.toml:"
     echo ""
+    echo -e "${BLUE}[data.git]"
+    echo "    email = \"...\""
+    echo "    name = \"...\""
 
     if [[ " ${MISSING_CONFIG[@]} " =~ " gitlab_domain " ]]; then
-        echo -e "${BLUE}[data.git.work]"
-        echo "    gitlab_domain = \"gitlab.company.com\"  # Change to your GitLab domain${NC}"
-        echo ""
+        echo "    gitlab_domain = \"gitlab.company.com\"  # Change to your GitLab domain"
     fi
 
     if [[ " ${MISSING_CONFIG[@]} " =~ " token " ]]; then
-        echo -e "${BLUE}[data.git.credential]"
-        echo "    token = \"your-gitlab-token-here\"  # Your GitLab personal access token${NC}"
-        echo ""
+        echo "    token = \"your-gitlab-token-here\"  # Your GitLab personal access token"
     fi
+    echo -e "${NC}"
 
     echo "After adding these values, run:"
     echo "  chezmoi apply"

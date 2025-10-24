@@ -154,8 +154,6 @@ This file is stored **outside** the chezmoi source directory and is **not commit
 [data.git]
     email = "your.email@example.com"
     name = "Your Name"
-
-[data.git.credential]
     token = "your-secret-token-here"
 ```
 
@@ -168,7 +166,7 @@ This file is stored **outside** the chezmoi source directory and is **not commit
     name = {{ .git.name }}
 
 [credential]
-    helper = "!f() { echo \"password={{ .git.credential.token }}\"; }; f"
+    helper = "!f() { echo \"password={{ .git.token }}\"; }; f"
 ```
 
 3. Preview the rendered template:
@@ -190,11 +188,7 @@ You can conditionally include configuration blocks based on machine type (work v
 [data.git]
     email = "your.email@example.com"
     name = "Your Name"
-
-[data.git.work]
     gitlab_domain = "gitlab.company.com"
-
-[data.git.credential]
     token = "your-gitlab-personal-access-token"
 ```
 
@@ -242,11 +236,11 @@ Single config file (`dot_gitconfig.tmpl`):
 {{- if .machine.is_work }}
 
 # Work-specific Git configuration
-[url "git@{{ .git.work.gitlab_domain }}:"]
-    insteadOf = https://{{ .git.work.gitlab_domain }}
+[url "git@{{ .git.gitlab_domain }}:"]
+    insteadOf = https://{{ .git.gitlab_domain }}
 
 [credential]
-    helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ .git.credential.token }}\"; }; f"
+    helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ .git.token }}\"; }; f"
 {{- end }}
 ```
 
@@ -286,12 +280,12 @@ The bootstrap script will:
 
 If you forgot to set up work configuration during bootstrap, or need to add it later:
 
-1. **Add missing config to chezmoi.toml**: Edit `~/.config/chezmoi/chezmoi.toml` and add:
+1. **Add missing config to chezmoi.toml**: Edit `~/.config/chezmoi/chezmoi.toml` and add to the `[data.git]` section:
    ```toml
-   [data.git.work]
+   [data.git]
+       email = "your.email@example.com"
+       name = "Your Name"
        gitlab_domain = "gitlab.company.com"
-
-   [data.git.credential]
        token = "your-token-here"
    ```
 
@@ -302,7 +296,7 @@ If you forgot to set up work configuration during bootstrap, or need to add it l
 
 3. **Switching from personal to work machine**:
    - Edit `~/.config/chezmoi/chezmoi.toml` and set `is_work = true`
-   - Add the `[data.git.work]` and `[data.git.credential]` sections
+   - Add `gitlab_domain` and `token` to the `[data.git]` section
    - Run `chezmoi apply`
 
 **Files currently using templates:**

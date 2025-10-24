@@ -15,15 +15,15 @@
 {{- if .machine.is_work }}
 
 # Work-specific Git configuration
-{{- if and (hasKey .git "work") (hasKey .git.work "gitlab_domain") }}
+{{- if hasKey .git "gitlab_domain" }}
 # Git URL rewrites for work GitLab
-[url "git@{{ .git.work.gitlab_domain }}:"]
-	insteadOf = https://{{ .git.work.gitlab_domain }}
+[url "git@{{ .git.gitlab_domain }}:"]
+	insteadOf = https://{{ .git.gitlab_domain }}
 {{- end }}
 
-{{- if and (hasKey .git "credential") (hasKey .git.credential "token") }}
+{{- if hasKey .git "token" }}
 # Credential helper with personal access token
 [credential]
-	helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ .git.credential.token }}\"; }; f"
+	helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ .git.token }}\"; }; f"
 {{- end }}
 {{- end }}
