@@ -46,12 +46,14 @@ brew "k9s"                        # Kubernetes CLI manager
 brew "ko"                         # Build and deploy Go apps on Kubernetes
 brew "krew"                       # Kubectl plugin manager
 brew "kubebuilder"                # SDK for building Kubernetes APIs
-brew "kubectl-debug"              # Debug running pods
 brew "kubernetes-cli"             # Kubernetes command-line interface
+brew "stern"                      # Multi-pod log tailing
+
+# Additional Kubernetes tools:
+# brew "kubectl-debug"              # Debug running pods
 # brew "kustomize"                  # Kubernetes configuration customization
 # brew "oras"                       # OCI Registry As Storage
 # brew "skopeo"                     # Work with remote container images
-brew "stern"                      # Multi-pod log tailing
 
 # Cloud Tools
 # brew "openstackclient"            # OpenStack command-line client
@@ -70,15 +72,17 @@ brew "sd"                         # Intuitive find & replace CLI
 # File & Directory Tools
 brew "ack"                        # Search tool like grep
 brew "coreutils"                  # GNU core utilities
-# brew "cpio"                       # Archiving utility
-brew "grep"                       # GNU grep
 brew "gnu-sed"                    # GNU sed
+brew "grep"                       # GNU grep
+brew "hwatch"                     # Modern watch with highlighting
 brew "tree"                       # Display directory tree
+
+# Additional file & directory utilities:
+# brew "cpio"                       # Archiving utility
 # brew "parallel"                   # Execute jobs in parallel
 # brew "pigz"                       # Parallel gzip
-# brew "watch"                      # Execute program periodically
 # brew "viddy"                      # Modern watch alternative
-brew "hwatch"                     # Modern watch with highlighting
+# brew "watch"                      # Execute program periodically
 
 # Terminal & Shell
 brew "atuin"                      # Shell history sync
@@ -87,6 +91,7 @@ brew "direnv"                     # Load/unload environment variables
 brew "fish"                       # Friendly interactive shell
 brew "fzf"                        # Command-line fuzzy finder
 brew "tmux"                       # Terminal multiplexer
+brew "tpm"                        # Tmux Plugin Manager
 
 # System Monitoring & Info
 brew "htop"                       # Interactive process viewer
@@ -112,11 +117,13 @@ brew "chezmoi"                    # Manage dotfiles across machines
 # ============================================================================
 
 # Network Tools
-# brew "arping"                     # ARP-level ping
 brew "curl"                       # Transfer data with URLs
-brew "wget"                       # Internet file retriever
 brew "httpie"                     # User-friendly HTTP client
 brew "telnet"                     # Network protocol tool
+brew "wget"                       # Internet file retriever
+
+# Additional network tools:
+# brew "arping"                     # ARP-level ping
 
 # SSH & Remote Access
 # brew "expect"                     # Automate interactive applications
@@ -145,20 +152,17 @@ brew "d2"                         # Modern diagram scripting language
 # brew "graphviz"                   # Graph visualization
 
 # ============================================================================
-# WINDOW MANAGEMENT & SYSTEM TOOLS (macOS specific)
-# ============================================================================
-
-# brew "terminal-notifier"          # Send macOS notifications
-
-# ============================================================================
 # MISCELLANEOUS CLI TOOLS
 # ============================================================================
 
-# brew "bfg"                        # Remove large files from Git history
-# brew "gemini-cli"                 # Gemini protocol client
 brew "glab"                       # GitLab CLI tool
 brew "mas"                        # Mac App Store CLI
 brew "ytt"                        # YAML templating tool
+
+# Additional CLI tools:
+# brew "bfg"                        # Remove large files from Git history
+# brew "gemini-cli"                 # Gemini protocol client
+# brew "terminal-notifier"          # Send macOS notifications
 
 # ============================================================================
 # GUI APPLICATIONS (Casks)
@@ -168,10 +172,12 @@ brew "ytt"                        # YAML templating tool
 cask "claude"                     # Claude AI desktop app
 cask "claude-code"                # Claude Code editor
 cask "cursor"                     # AI-powered code editor
+cask "visual-studio-code"         # VS Code editor
+
+# Additional development tools:
 # cask "doteditor"                  # Dot file editor
 # cask "jetbrains-toolbox"          # JetBrains tools manager
 # cask "sublime-text"               # Text editor
-cask "visual-studio-code"         # VS Code editor
 # cask "visual-studio-code-insiders"# VS Code Insiders
 # cask "visual-studio-code@insiders"# VS Code Insiders (alternative)
 
@@ -189,13 +195,15 @@ cask "orbstack"                   # Fast, light Docker & Linux
 # cask "microsoft-edge"             # Microsoft Edge
 
 # Communication
+cask "slack"                      # Team communication
+cask "telegram"                   # Messaging app
+cask "whatsapp"                   # WhatsApp Desktop
+
+# Additional communication tools:
 # cask "microsoft-outlook"          # Email client
 # cask "microsoft-teams"            # Team collaboration
 # cask "skype"                      # Video chat
-# cask "slack"                      # Team communication
 # cask "slack-cli"                  # Slack CLI
-cask "telegram"                   # Messaging app
-cask "whatsapp"                   # WhatsApp Desktop
 # cask "wechat"                     # WeChat messaging
 # cask "zoom"                       # Video conferencing
 
@@ -203,17 +211,22 @@ cask "whatsapp"                   # WhatsApp Desktop
 # cask "notion"                     # Note-taking and collaboration
 cask "obsidian"                   # Knowledge base app
 cask "raycast"                    # Spotlight replacement
+cask "voiceink"                   # Voice dictation tool
 
 # Window Management & System Tools
 cask "aerospace"                  # Tiling window manager
-# cask "caffeine"                   # Keep Mac awake
-# cask "dozer"                      # Hide menu bar icons
 cask "karabiner-elements"         # Keyboard customizer
-# cask "lunar"                      # Display brightness control
 cask "mos"                        # Mouse smoothing
 
+# Additional system tools:
+# cask "caffeine"                   # Keep Mac awake
+# cask "dozer"                      # Hide menu bar icons
+# cask "lunar"                      # Display brightness control
+
 # Input Devices
-# cask "logi-options+"              # Logitech Options+
+cask "logi-options+"              # Logitech Options+
+
+# Alternative Logitech packages:
 # cask "logi-options-plus"          # Logitech Options+ (alternative)
 # cask "logitech-options"           # Logitech Options
 
@@ -240,6 +253,9 @@ cask "spotify"                    # Music streaming
 # cask "wireshark-app"              # Network protocol analyzer
 
 # Fonts
+cask "font-meslo-lg-nerd-font"    # Meslo LG Nerd Font
+
+# Additional fonts:
 # cask "font-hack-nerd-font"        # Nerd Font - Hack
 # cask "font-inconsolata"           # Inconsolata font
 
@@ -248,5 +264,5 @@ cask "spotify"                    # Music streaming
 # ============================================================================
 
 mas "AdGuard for Safari", id: 1440147259
-mas "Sourcegraph for Safari", id: 1543262193
-mas "Vimari", id: 1480933944
+# mas "Sourcegraph for Safari", id: 1543262193
+# mas "Vimari", id: 1480933944

@@ -129,6 +129,6 @@ set -g @plugin 'MunifTanjim/tmux-suspend'
 {{- if eq .chezmoi.os "linux" }}
 run '/home/linuxbrew/.linuxbrew/opt/tpm/share/tpm/tpm'
 {{- else }}
-run '~/.tmux/plugins/tpm/tpm'
+run '/opt/homebrew/opt/tpm/share/tpm/tpm'
 {{- end }}
 
