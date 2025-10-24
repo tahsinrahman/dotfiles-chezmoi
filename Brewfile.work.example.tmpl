@@ -1,12 +1,23 @@
-# Brewfile.work.example
-# This is an EXAMPLE work-specific Brewfile
+# Brewfile.work.example.tmpl
+# This is a TEMPLATE for work-specific Brewfile
+# Uses chezmoi template variables (e.g., {{ .git.gitlab_domain }})
 #
-# To use on your work machine:
-# 1. Copy this file to ~/.Brewfile.work (NOT in chezmoi, NOT committed to git)
-# 2. Edit ~/.Brewfile.work with your actual work-specific packages
-# 3. The setup script will automatically install from both ~/Brewfile and ~/.Brewfile.work
+# On work machines, this template is automatically rendered to ~/.Brewfile.work
+# The setup script will:
+# 1. Substitute template variables from ~/.config/chezmoi/chezmoi.toml
+# 2. Create ~/.Brewfile.work (NOT in chezmoi, NOT committed to git)
+# 3. Install from both ~/.Brewfile and ~/.Brewfile.work
 #
 # IMPORTANT: ~/.Brewfile.work should NEVER be added to chezmoi or committed to git
+
+# ============================================================================
+# TAPS - Work-Specific Homebrew Repositories
+# ============================================================================
+
+{{- if .git.gitlab_domain }}
+# Work-specific tap from GitLab (uses gitlab_domain from chezmoi.toml)
+tap "tools/core", "git@{{ .git.gitlab_domain }}:tools/homebrew-core.git"
+{{- end }}
 
 # ============================================================================
 # WORK-SPECIFIC CLI TOOLS

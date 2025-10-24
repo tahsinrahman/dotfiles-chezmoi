@@ -178,9 +178,10 @@ if [[ " ${MISSING_FILES[@]} " =~ " brewfile " ]]; then
     echo -e "${BLUE}⚙️  Setting up ~/.Brewfile.work${NC}"
     echo ""
 
-    if [[ -f ~/.local/share/chezmoi/Brewfile.work.example ]]; then
-        cp ~/.local/share/chezmoi/Brewfile.work.example ~/.Brewfile.work
-        echo -e "${GREEN}✅ ~/.Brewfile.work created from template${NC}"
+    if [[ -f ~/.local/share/chezmoi/Brewfile.work.example.tmpl ]]; then
+        # Render the template with chezmoi to substitute variables
+        chezmoi execute-template < ~/.local/share/chezmoi/Brewfile.work.example.tmpl > ~/.Brewfile.work
+        echo -e "${GREEN}✅ ~/.Brewfile.work created from template (with substituted variables)${NC}"
         echo ""
         echo "📝 Edit ~/.Brewfile.work to add your work-specific packages"
 
