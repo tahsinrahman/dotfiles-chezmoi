@@ -11,5 +11,7 @@
 [delta]
 	side-by-side = true
 
+{{- if .machine.is_work }}
 [include]
 	path = ~/.gitconfig.work
+{{- end }}

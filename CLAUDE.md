@@ -6,6 +6,31 @@ This repository manages dotfiles using [chezmoi](https://www.chezmoi.io/), a too
 
 This is a personal dotfiles repository that synchronizes configuration files across different systems (macOS, Linux, etc.) while handling platform-specific differences.
 
+## Quick Start - New Machine Setup
+
+Run the bootstrap script to set up a new machine:
+
+```bash
+# Clone the repository
+git clone git@github.com:tahsinrahman/dotfiles-chezmoi.git ~/dotfiles-temp
+cd ~/dotfiles-temp
+
+# Run bootstrap
+bash bootstrap.sh
+```
+
+The script will:
+1. Install Homebrew (if not present)
+2. Generate SSH key (if needed)
+3. Install chezmoi
+4. Create chezmoi config (asks if work or personal machine)
+5. Initialize and apply dotfiles
+6. Install Homebrew packages
+7. **Work machines only**: Set up work-specific configurations:
+   - `~/.gitconfig.work` - GitLab credentials and URL rewrites
+   - `~/.ssh/config.work` - SSH proxy configurations
+   - `~/.Brewfile.work` - Work-specific packages
+
 ## Working with Chezmoi
 
 ### Key Concepts
@@ -218,8 +243,10 @@ Host *.internal.company.com
     email = {{ .git.email }}
     name = {{ .git.name }}
 
+{{- if .machine.is_work }}
 [include]
     path = ~/.gitconfig.work
+{{- end }}
 ```
 
 Create work file locally (NOT managed by chezmoi):
@@ -232,7 +259,9 @@ Create work file locally (NOT managed by chezmoi):
     helper = "!f() { echo \"password=YOUR_TOKEN\"; }; f"
 ```
 
-On personal machines, simply don't create the work config files - both SSH and Git will silently skip missing include files.
+The conditional `{{- if .machine.is_work }}` ensures the include directive is only added on work machines. On personal machines (where `is_work = false` in chezmoi.toml), the include won't be present at all.
+
+See `.gitconfig.work.example` in the chezmoi source directory for a template.
 
 **Setting up on a new machine:**
 
