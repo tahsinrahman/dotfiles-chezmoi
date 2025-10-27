@@ -1,0 +1,8 @@
+[data.machine]
+    is_work = false
+
+[data.git]
+    email = "user@example.com"
+    name = "Your Name"
+    gitlab_domain = "gitlab.company.com"
+    token = "glpat-xxxxxxxxxxxxxxxxxxxx"

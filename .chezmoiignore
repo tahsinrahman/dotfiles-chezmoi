@@ -9,3 +9,6 @@ README.md
 # Work-specific Brewfile - keep local, never commit to git
 .Brewfile.work
 bootstrap.sh
+
+# Example config file - template only, not to be applied
+chezmoi.toml.example
