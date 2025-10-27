@@ -1,6 +1,17 @@
 Include ~/.orbstack/ssh/config
+{{- if .machine.is_work }}
 Include ~/.ssh/config.work
+{{- end }}
 
 Host github.com
  HostName ssh.github.com
  Port 443
+
+{{- if not .machine.is_work }}
+
+Host gitlab.com-choreon
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/gitlab-choreon
+    IdentitiesOnly yes
+{{- end }}

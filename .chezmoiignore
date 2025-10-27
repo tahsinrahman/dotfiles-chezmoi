@@ -10,5 +10,6 @@ README.md
 .Brewfile.work
 bootstrap.sh
 
-# Example config file - template only, not to be applied
+# Example config files - templates only, not to be applied
 chezmoi.toml.example
+Brewfile.work.example
