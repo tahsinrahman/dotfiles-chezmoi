@@ -101,7 +101,7 @@ git push
 ## What's Included
 
 - **Shell**: Fish, Tmux
-- **Terminal**: Alacritty
+- **Terminal**: Ghostty
 - **Development**: Git, SSH
 - **macOS**: AeroSpace, Karabiner
 - **Tools**: Topgrade, Claude Code

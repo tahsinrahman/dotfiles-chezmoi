@@ -182,7 +182,7 @@ cask "visual-studio-code"         # VS Code editor
 # cask "visual-studio-code@insiders"# VS Code Insiders (alternative)
 
 # Terminals
-cask "alacritty"                  # GPU-accelerated terminal
+cask "ghostty"                    # Fast, native terminal emulator
 
 # Containers & Virtualization
 # cask "docker"                     # Docker Desktop

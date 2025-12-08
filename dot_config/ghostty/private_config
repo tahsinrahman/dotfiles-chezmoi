@@ -1,0 +1,62 @@
+theme = iTerm2 Tango Dark
+command = /opt/homebrew/bin/fish
+
+# Make inactive panes visually dimmer
+unfocused-split-opacity = 0.3
+# unfocused-split-fill = #1a1a1a
+unfocused-split-fill = #0a0a0a
+
+# Add visible dividers between splits
+split-divider-color = #888888
+
+# Add padding for better spacing
+window-padding-x = 2
+window-padding-y = 2
+
+# Tmux-style vim keybindings (Ctrl+a prefix)
+
+# Window management
+keybind = ctrl+a>c=new_tab
+keybind = ctrl+a>n=next_tab
+keybind = ctrl+a>p=previous_tab
+keybind = ctrl+a>shift+comma=move_tab:-1
+keybind = ctrl+a>shift+period=move_tab:1
+
+# Jump to specific tabs (Ctrl+a then 1-9)
+keybind = ctrl+a>one=goto_tab:1
+keybind = ctrl+a>two=goto_tab:2
+keybind = ctrl+a>three=goto_tab:3
+keybind = ctrl+a>four=goto_tab:4
+keybind = ctrl+a>five=goto_tab:5
+keybind = ctrl+a>six=goto_tab:6
+keybind = ctrl+a>seven=goto_tab:7
+keybind = ctrl+a>eight=goto_tab:8
+keybind = ctrl+a>nine=goto_tab:9
+
+# Split panes (Ctrl+a then \ for vertical, - for horizontal)
+keybind = ctrl+a>backslash=new_split:right
+keybind = ctrl+a>minus=new_split:down
+
+# Navigate panes with vim keys (Ctrl+a then h/j/k/l)
+keybind = ctrl+a>h=goto_split:left
+keybind = ctrl+a>j=goto_split:bottom
+keybind = ctrl+a>k=goto_split:top
+keybind = ctrl+a>l=goto_split:right
+
+# Resize panes with vim keys (Ctrl+a then H/J/K/L)
+keybind = ctrl+a>shift+h=resize_split:left,10
+keybind = ctrl+a>shift+j=resize_split:down,10
+keybind = ctrl+a>shift+k=resize_split:up,10
+keybind = ctrl+a>shift+l=resize_split:right,10
+
+# Close current pane (Ctrl+a then x)
+keybind = ctrl+a>x=close_surface
+
+# Toggle zoom pane (Ctrl+a then z)
+keybind = ctrl+a>z=toggle_split_zoom
+
+# Scrolling (vim-style)
+keybind = ctrl+b=scroll_page_up
+keybind = ctrl+f=scroll_page_down
+keybind = ctrl+a>zero=scroll_to_top
+keybind = ctrl+a>shift+g=scroll_to_bottom
