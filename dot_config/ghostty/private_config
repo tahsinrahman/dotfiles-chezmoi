@@ -56,7 +56,8 @@ keybind = ctrl+a>x=close_surface
 keybind = ctrl+a>z=toggle_split_zoom
 
 # Scrolling (vim-style)
-keybind = ctrl+b=scroll_page_up
-keybind = ctrl+f=scroll_page_down
+keybind = ctrl+a>b=scroll_page_up
+keybind = ctrl+a>f=scroll_page_down
 keybind = ctrl+a>zero=scroll_to_top
 keybind = ctrl+a>shift+g=scroll_to_bottom
+
