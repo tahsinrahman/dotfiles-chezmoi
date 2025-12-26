@@ -3,7 +3,6 @@ command = /opt/homebrew/bin/fish
 
 # Make inactive panes visually dimmer
 unfocused-split-opacity = 0.3
-# unfocused-split-fill = #1a1a1a
 unfocused-split-fill = #0a0a0a
 
 # Add visible dividers between splits
@@ -60,4 +59,7 @@ keybind = ctrl+a>b=scroll_page_up
 keybind = ctrl+a>f=scroll_page_down
 keybind = ctrl+a>zero=scroll_to_top
 keybind = ctrl+a>shift+g=scroll_to_bottom
+
+# Clipboard management
+clipboard-paste-protection = false
 
