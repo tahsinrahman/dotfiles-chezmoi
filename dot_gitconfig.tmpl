@@ -17,9 +17,17 @@
 	autosquash = true
 
 [push]
-	push.autoSetupRemote = true
+	autoSetupRemote = true
 
 {{- if .machine.is_work }}
+
+[push]
+	pushOption = merge_request.create
+	pushOption = merge_request.remove_source_branch
+	pushOption = merge_request.squash
+	pushOption = merge_request.label=scrum::barend
+	pushOption = merge_request.label=Ready for Review
+	pushOption = merge_request.assign=trahman
 
 # Work-specific Git configuration
 {{- if hasKey .git "gitlab_domain" }}
