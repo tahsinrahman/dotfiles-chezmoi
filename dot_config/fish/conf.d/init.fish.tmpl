@@ -24,15 +24,11 @@ set -gx PATH /home/linuxbrew/.linuxbrew/bin $PATH
 # Work-specific OpenAI configuration
 set -xg OPENAI_API_KEY "{{ .openai.api_key }}"
 set -xg OPENAI_BASE_URL "https://genai-gateway.agoda.is/v1"
+
+set -xg GOPRIVATE gitlab.agodadev.io
 {{- end }}
 
 fish_hybrid_key_bindings
 
 atuin init fish --disable-up-arrow | source
 
-# Auto-start tmux (disabled)
-# if status is-interactive
-#     and not set -q TMUX
-#     and command -v tmux >/dev/null 2>&1
-#     tmux attach || tmux new-session -s default
-# end
