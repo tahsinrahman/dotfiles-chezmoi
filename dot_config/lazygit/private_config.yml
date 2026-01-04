@@ -2,6 +2,6 @@ gui:
   showBottomLine: false
   showCommandLog: false
   showRandomTip: false
-  showRootItemInFileTree: true
+  showRootItemInFileTree: false
   border: hidden
   nerdFontsVersion: "3"
