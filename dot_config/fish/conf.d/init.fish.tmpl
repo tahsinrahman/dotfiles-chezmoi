@@ -16,6 +16,7 @@ alias watch='hwatch --shell "fish -c" --color --no-title'
 {{- if eq .chezmoi.os "darwin" }}
 set -gx PATH /opt/homebrew/bin $PATH
 set -gx PATH /opt/homebrew/sbin $PATH
+set -gx XDG_CONFIG_HOME "$HOME/.config"
 {{- else if eq .chezmoi.os "linux" }}
 set -gx PATH /home/linuxbrew/.linuxbrew/bin $PATH
 {{- end }}
