@@ -111,7 +111,8 @@
                         "is_keyboard": true,
                         "product_id": 832,
                         "vendor_id": 13364
-                    }
+                    },
+                    "ignore": true
                 },
                 {
                     "identifiers": {
