@@ -3,3 +3,8 @@ gui:
   showRandomTip: false
   showRootItemInFileTree: false
   nerdFontsVersion: "3"
+git:
+  log:
+    showGraph: always
+    showWholeGraph: true
+    order: topo-order
