@@ -11,4 +11,7 @@ git:
   pagers:
     - colorArg: always
       pager: delta --dark --paging=never --line-numbers
-
+keybinding:
+  commits:
+    moveDownCommit: J
+    moveUpCommit: K
