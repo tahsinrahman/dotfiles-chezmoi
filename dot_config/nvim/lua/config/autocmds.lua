@@ -24,3 +24,16 @@ vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
   desc = "Auto-save after delay",
 })
 
+-- Ensure single newline at end of file (remove multiple trailing newlines)
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function()
+    if vim.bo.modifiable and vim.bo.buftype == "" then
+      local save_cursor = vim.fn.getpos(".")
+      vim.cmd([[silent! %s/\n\+\%$//e]])
+      vim.fn.setpos(".", save_cursor)
+    end
+  end,
+  desc = "Remove multiple trailing newlines",
+})
+
