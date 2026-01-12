@@ -19,7 +19,6 @@
 	default-branch = !git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
 	merge-base-origin = "!/bin/bash -c 'git merge-base \"${1:-HEAD}\" \"origin/$(git default-branch)\"' -- "
 	stack = "!/bin/bash -c 'BRANCH=\"${1:-HEAD}\"; MERGE_BASE=\"$(git merge-base-origin \"$BRANCH\")\"; git log --decorate-refs=refs/heads --simplify-by-decoration --pretty=format:\"%(decorate:prefix=,suffix=,tag=,separator=%n)\" \"$MERGE_BASE\"..\"$BRANCH\"' -- "
-	push-stack = "!/bin/bash -c 'BRANCH=\"${1:-HEAD}\"; git stack \"$BRANCH\" | xargs -I {} git push --force-with-lease origin {}' -- "
 
 [rebase]
 	updateRefs = true
@@ -37,6 +36,9 @@
 	pushOption = merge_request.label=scrum::barend
 	pushOption = merge_request.label=Ready for Review
 	pushOption = merge_request.assign=trahman
+
+[alias]
+	push-stack = "!/bin/bash -c 'BRANCH=\"${1:-HEAD}\"; DEFAULT=$(git default-branch); PREV=\"$DEFAULT\"; MERGE_BASE=$(git merge-base-origin \"$BRANCH\"); while read -r BR || [[ -n \"$BR\" ]]; do git push --force-with-lease -o merge_request.create -o merge_request.remove_source_branch -o merge_request.squash -o merge_request.label=scrum::barend -o \"merge_request.label=Ready for Review\" -o merge_request.assign=trahman -o merge_request.target=\"$PREV\" origin \"$BR\"; PREV=\"$BR\"; done < <(git log --reverse --decorate-refs=refs/heads --simplify-by-decoration --pretty=format:\"%(decorate:prefix=,suffix=,tag=,separator=%n)\" \"$MERGE_BASE\"..\"$BRANCH\")' -- "
 
 # Work-specific Git configuration
 {{- if hasKey .git "gitlab_domain" }}
