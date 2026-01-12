@@ -64,7 +64,7 @@ keybind = ctrl+a>shift+g=scroll_to_bottom
 # Clipboard management
 clipboard-paste-protection = false
 
-# Notify when long-running commands complete (only when unfocused)
-notify-on-command-finish = unfocused
-notify-on-command-finish-after = 5s
-notify-on-command-finish-action = notify
+# Notify when long-running commands complete
+notify-on-command-finish = always
+notify-on-command-finish-after = 10s
+notify-on-command-finish-action = bell,notify
