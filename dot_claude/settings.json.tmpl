@@ -13,11 +13,16 @@
     "allow": [
 {{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
       "Skill(gitlab-skills:gitlab)",
+      "Skill(create-issue)",
       "Skill(gitlab-pm:create-issue)",
       "Skill(gitlab-pm:create-mr)",
 {{- end }}
       "Bash(cat:*)",
+      "Bash(tree:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
       "Bash(cd:*)",
+      "Bash(sed:*)",
       "Bash(bd:*)",
       "Bash(export:*)",
       "Bash(find:*)",
@@ -45,6 +50,7 @@
       "Bash(go doc:*)",
       "Bash(go mod:*)",
       "Bash(go work:*)",
+      "Bash(glab mr update:*)",
       "Bash(kubectl get:*)",
       "Bash(kubectl logs:*)",
       "Bash(kubectl describe:*)",
@@ -115,7 +121,7 @@
     "gitlab-skills@fleet-tools": true,
 {{- end }}
     "beads@beads-marketplace": true,
-    "clangd-lsp@claude-plugins-official": true
+    "clangd-lsp@claude-plugins-official": true,
     "plannotator@plannotator": true,
     "gopls-lsp@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true
