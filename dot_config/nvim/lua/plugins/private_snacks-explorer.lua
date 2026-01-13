@@ -6,6 +6,9 @@ return {
     },
     picker = {
       sources = {
+        files = {
+          hidden = true,
+        },
         explorer = {
           hidden = true,
           auto_close = false,
