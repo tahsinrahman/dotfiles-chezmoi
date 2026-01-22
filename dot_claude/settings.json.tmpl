@@ -13,9 +13,9 @@
     "allow": [
 {{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
       "Skill(gitlab-skills:gitlab)",
-      "Skill(create-issue)",
       "Skill(gitlab-pm:create-issue)",
       "Skill(gitlab-pm:create-mr)",
+      "mcp__gitlab__create_issue",
 {{- end }}
       "Bash(cat:*)",
       "Bash(wc:*)",
@@ -95,7 +95,6 @@
     ],
     "PreCompact": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
@@ -106,11 +105,20 @@
     ],
     "SessionStart": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
             "command": "bd prime"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/ccnotify/ccnotify.py Stop"
           }
         ]
       }
@@ -122,6 +130,11 @@
     "gitlab-pm@fleet-tools": true,
     "gitlab-skills@fleet-tools": true,
 {{- end }}
+    "code-review@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true
     "beads@beads-marketplace": true,
     "clangd-lsp@claude-plugins-official": true,
     "plannotator@plannotator": true,
