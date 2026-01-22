@@ -68,3 +68,6 @@ clipboard-paste-protection = false
 notify-on-command-finish = always
 notify-on-command-finish-after = 10s
 notify-on-command-finish-action = bell,notify
+
+# fix WARNING: terminal is not fully fonctional during ssh
+shell-integration-features = ssh-terminfo,ssh-env
