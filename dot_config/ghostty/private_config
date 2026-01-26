@@ -71,3 +71,11 @@ notify-on-command-finish-action = bell,notify
 
 # fix WARNING: terminal is not fully fonctional during ssh
 shell-integration-features = ssh-terminfo,ssh-env
+
+# option is treated as alt
+# On macOS by default, the option key plus a character will sometimes produce a Unicode character
+macos-option-as-alt = true
+
+# auto-update
+auto-update = download
+auto-update-channel = tip
