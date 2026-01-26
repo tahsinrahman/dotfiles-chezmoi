@@ -12,6 +12,34 @@ return {
         explorer = {
           hidden = true,
           auto_close = false,
+          win = {
+            list = {
+              keys = {
+                ["<Tab>"] = {
+                  function()
+                    -- Find editor window (non-explorer, non-floating)
+                    for _, win in ipairs(vim.api.nvim_list_wins()) do
+                      local cfg = vim.api.nvim_win_get_config(win)
+                      if cfg.relative == "" then
+                        local buf = vim.api.nvim_win_get_buf(win)
+                        local ft = vim.bo[buf].filetype
+                        if ft ~= "snacks_picker_list" and ft ~= "snacks_picker_input" and ft ~= "snacks_layout_box" then
+                          vim.api.nvim_set_current_win(win)
+                          return
+                        end
+                      end
+                    end
+                  end,
+                  desc = "Switch to editor",
+                },
+              },
+            },
+            input = {
+              keys = {
+                ["<Tab>"] = false,
+              },
+            },
+          },
         },
       },
     },
