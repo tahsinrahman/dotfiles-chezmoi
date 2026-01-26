@@ -13,3 +13,6 @@ bootstrap.sh
 # Example config files - templates only, not to be applied
 chezmoi.toml.example
 Brewfile.work.example
+
+# Neovim plugin lock file - managed by lazy.nvim, not chezmoi
+.config/nvim/lazy-lock.json
