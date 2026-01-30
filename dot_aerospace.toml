@@ -156,3 +156,7 @@ automatically-unhide-macos-hidden-apps = false
     if.app-id = 'com.anthropic.claudefordesktop'
     run = 'move-node-to-workspace 1'
 
+[[on-window-detected]]
+    if.app-id = 'org.videolan.vlc'
+    run = 'move-node-to-workspace 4'
+
