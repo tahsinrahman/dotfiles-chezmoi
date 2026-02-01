@@ -12,6 +12,7 @@ return {
         explorer = {
           hidden = true,
           auto_close = false,
+          follow_file = true,
           win = {
             list = {
               keys = {
@@ -69,6 +70,16 @@ return {
         end
         if dominated_by_explorer then
           vim.cmd("qa")
+        end
+      end,
+    })
+
+    -- Auto-reveal files in explorer (even outside project root)
+    vim.api.nvim_create_autocmd("BufEnter", {
+      callback = function()
+        local picker = Snacks.picker.get({ source = "explorer" })[1]
+        if picker and vim.fn.filereadable(vim.api.nvim_buf_get_name(0)) == 1 then
+          Snacks.explorer.reveal()
         end
       end,
     })
