@@ -1,4 +1,5 @@
 theme = iTerm2 Tango Dark
+font-family = "JetBrainsMono Nerd Font"
 command = /opt/homebrew/bin/fish
 shell-integration = fish
 
