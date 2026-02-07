@@ -110,6 +110,7 @@ brew "topgrade"                   # Upgrade all the things
 
 # Dotfiles & Configuration Management
 brew "chezmoi"                    # Manage dotfiles across machines
+brew "mysides"                    # Manage Finder sidebar favorites
 # brew "yadm"                       # Yet Another Dotfiles Manager
 
 # ============================================================================
