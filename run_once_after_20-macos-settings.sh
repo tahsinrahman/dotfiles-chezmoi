@@ -54,7 +54,7 @@ defaults write com.apple.dock autohide-time-modifier -float 0.15
 
 defaults write com.apple.dock wvous-tl-corner -int 0
 defaults write com.apple.dock wvous-tr-corner -int 0
-defaults write com.apple.dock wvous-tr-corner -int "$HOT_CORNER_TOP_RIGHT_ACTION"
+defaults write com.apple.dock wvous-tr-corner -int 0
 defaults write com.apple.dock wvous-bl-corner -int 0
 defaults write com.apple.dock wvous-br-corner -int 0
 defaults write com.apple.dock wvous-tl-modifier -int 0
