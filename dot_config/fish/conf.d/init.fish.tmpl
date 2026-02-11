@@ -9,7 +9,10 @@ set -gx PATH $HOME/.local/bin $PATH
 
 alias k="kubectl"
 
-alias ls='lsd'
+alias ls='eza --icons --git --group-directories-first'
+alias ll='eza --icons --git --group-directories-first --smart-group -l'
+alias la='eza --icons --git --group-directories-first --smart-group -la'
+alias lt='eza --icons --git --group-directories-first --tree'
 alias diff='delta'
 alias watch='hwatch --shell "fish -c" --color --no-title'
 

@@ -64,8 +64,8 @@ brew "stern"                      # Multi-pod log tailing
 # ============================================================================
 
 # Modern CLI Replacements
+brew "eza"                        # Modern ls with colors, icons, and git integration
 brew "fd"                         # Simple, fast alternative to find
-brew "lsd"                        # Modern ls with colors and icons
 brew "ripgrep"                    # Fast grep alternative
 brew "sd"                         # Intuitive find & replace CLI
 
