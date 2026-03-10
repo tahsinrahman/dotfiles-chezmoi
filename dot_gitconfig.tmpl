@@ -13,8 +13,8 @@
 	side-by-side = true
 
 [alias]
-	amend-push = !git add -A && git commit --amend --no-edit && git push --force-with-lease
-	commit-amend = !git add -A && git commit --amend --no-edit
+	amend-push = "!f() { git add -A && git commit --amend --no-edit \"$@\" && git push --force-with-lease \"$@\"; }; f"
+	commit-amend = "!f() { git add -A && git commit --amend --no-edit \"$@\"; }; f"
 	
 	default-branch = !git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
 	merge-base-origin = "!/bin/bash -c 'git merge-base \"${1:-HEAD}\" \"origin/$(git default-branch)\"' -- "
