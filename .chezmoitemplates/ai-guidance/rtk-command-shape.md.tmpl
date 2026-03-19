@@ -1,0 +1,26 @@
+## RTK Command Shape
+
+When running `go test`, `go build`, or `golangci-lint run` in an RTK-enabled shell, the executable must be the first top-level token so RTK can intercept it.
+
+- Do not prefix these commands with inline environment variable assignments.
+- Do not wrap these commands in shell command substitution.
+- Do not use `make` for these commands when a direct top-level command is available.
+- If a workflow would normally use `make`, run the underlying RTK-compatible command instead.
+- Set required environment variables in separate commands first, then run the bare command.
+
+Good:
+
+```bash
+export KUBEBUILDER_ASSETS="$(pwd)/$(./bin/setup-envtest use 1.32.0 --bin-dir ./bin -p path)"
+export FLEET_CLUSTER_WATCH_NAMESPACE="kube-system"
+go test ./...
+```
+
+Bad:
+
+```bash
+KUBEBUILDER_ASSETS="$(pwd)/$(./bin/setup-envtest use 1.32.0 --bin-dir ./bin -p path)" go test ./...
+make test
+make lint
+make build
+```
