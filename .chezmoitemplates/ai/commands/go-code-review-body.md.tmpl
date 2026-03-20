@@ -1,0 +1,73 @@
+# Go Code Review Command
+
+## Step 1: Gather Review Context
+
+Determine the current branch and look up the merge request for that branch using the GitLab MCP server.
+
+Collect:
+- MR title
+- MR description
+- target branch
+
+If no merge request is found for the current branch, fall back to `main` as the base branch.
+
+## Step 2: Gather Go Diff Context
+
+Use the target branch from MR metadata as the base branch for all diff commands.
+
+```bash
+git fetch origin
+git diff origin/<target-branch>...HEAD --name-only -- "*.go"
+git diff --stat origin/<target-branch>...HEAD -- "*.go"
+git diff origin/<target-branch>...HEAD -- "*.go"
+```
+
+If there are no changed Go files, say so clearly and stop.
+
+## Step 3: Load Go Skill
+
+Load the complete Go style guide using the Skill tool:
+
+```
+Skill tool: golang
+```
+
+## Step 4: Review Go Changes
+
+Review the changed Go files and diffs using the loaded `golang` skill.
+
+Apply the skill to identify issues, missing tests, risky patterns, and concrete fixes.
+
+## Step 5: Present Findings
+
+Summarize issues by category with:
+- File path and line number
+- Issue description
+- Relevant Go guideline reference
+- Suggested fix
+
+Format:
+```
+## Code Review Summary
+
+### Critical Issues
+- {file}:{line} - {description}
+
+### Naming
+- {findings}
+
+### Error Handling
+- {findings}
+
+### Testing
+- {findings}
+
+### API Design
+- {findings}
+
+### Concurrency
+- {findings}
+
+### Recommendations
+- {actionable suggestions}
+```
