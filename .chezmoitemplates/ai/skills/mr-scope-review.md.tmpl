@@ -1,0 +1,52 @@
+---
+name: mr-scope-review
+description: Reviews merge request scope and suggests clean split points when independent concerns are bundled together.
+---
+
+# MR Scope & Split Reviewer
+
+Use this skill when reviewing a merge request to decide whether it is well-scoped or should be split into smaller, independent MRs.
+
+Assume the surrounding review prompt already provides the MR context and diff context you need.
+
+## Inspect Changes
+
+Review the actual diff for each changed file or change set provided in the review context.
+
+```bash
+git diff origin/main...HEAD -- <file>
+```
+
+Classify changes by concern group, not by file count:
+- **Behavioral** - Alters runtime logic, control flow, API contracts, or observable output. Includes related tests.
+- **Structural** - Refactors, renames, moves, or reformatting that preserve behavior. Includes related tests.
+- **Infrastructure** - CI/CD, build config, tooling, or test infrastructure changes unrelated to production behavior.
+
+## Identify Independent Change Sets
+
+Group the diff into change sets that could land separately without breaking each other.
+
+
+## Output Format
+
+Output only a `Suggested Splits` section.
+
+For each independent change set, include:
+- **MR title** and category
+- Files included
+- Merge order and dependencies on other suggested MRs
+- One-line rationale
+
+End with exactly one verdict line:
+- **Well-scoped** - no split needed
+- **Consider splitting** - mixed but tightly coupled
+- **Should be split** - independent concerns bundled together
+
+Do not include any other sections.
+Do not include change inventory, mixed-concern analysis, or a why-split table.
+
+## Rules
+
+- Structural change plus behavioral change in the same MR always gets flagged. This includes refactor plus new logic, code move plus logic change, and rename plus new functionality.
+- Dependency upgrades that require code adaptation should be split from the adaptation when possible.
+- Do not suggest splitting purely because the MR is large; a large single-concern MR is acceptable.

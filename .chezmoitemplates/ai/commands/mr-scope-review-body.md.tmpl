@@ -1,0 +1,39 @@
+# MR Scope Review Command
+
+## Step 1: Gather MR Context
+
+Determine the current branch and look up the merge request for that branch using the GitLab MCP server.
+
+Collect:
+- MR title
+- MR description
+- target branch
+
+If no merge request is found for the current branch, fall back to `main` as the base branch.
+
+## Step 2: Gather Diff Context
+
+Use the target branch from MR metadata as the base branch for all diff commands.
+
+```bash
+git fetch origin
+git diff --stat origin/<target-branch>...HEAD
+git diff --name-only origin/<target-branch>...HEAD
+```
+
+For each changed file, inspect the full diff:
+
+```bash
+git diff origin/<target-branch>...HEAD -- <file>
+```
+
+## Step 3: Load Skill
+
+Load the `mr-scope-review` skill.
+
+## Step 4: Execute Review
+
+Apply the skill using the gathered MR metadata, file list, diff stat, and per-file diffs.
+
+Output only the `Suggested Splits` section required by the skill.
+Do not add any extra preamble or summary outside that section.

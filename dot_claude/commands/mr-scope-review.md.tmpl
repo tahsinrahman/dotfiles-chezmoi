@@ -1,0 +1,11 @@
+---
+name: mr-scope-review
+description: Review MR scope, gather branch context, and suggest clean split points
+help: |
+  Reviews the current branch like a merge request, gathers the base branch context,
+  loads the MR scope review skill, and outputs only suggested splits.
+
+  Usage: /mr-scope-review
+---
+
+{{ includeTemplate ".chezmoitemplates/ai/commands/mr-scope-review-body.md.tmpl" . }}
