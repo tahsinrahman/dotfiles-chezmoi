@@ -1,34 +1,29 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "alwaysThinkingEnabled": true,
+  "autoMemoryEnabled": true,
+  "autoDreamEnabled": true,
   "enabledPlugins": {
 {{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
     "claude-code-setup@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
-    "code-reviewer@fleet-tools": true,
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "gitlab-pm@fleet-tools": true,
-    "gitlab-skills@fleet-tools": true,
-    "golang@fleet-tools": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "plannotator@plannotator": true
+    "gopls-lsp@claude-plugins-official": true
 {{- else }}
     "claude-code-setup@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "plannotator@plannotator": true
+    "gopls-lsp@claude-plugins-official": true
 {{- end }}
   },
 {{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
   "env": {
     "ANTHROPIC_AUTH_TOKEN": "{{ .claude.auth_token }}",
     "ANTHROPIC_BEDROCK_BASE_URL": "{{ .claude.bedrock_url }}",
-    "ANTHROPIC_MODEL": "us.anthropic.claude-opus-4-6-v1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_SKIP_BEDROCK_AUTH": "1",
     "CLAUDE_CODE_USE_BEDROCK": "1"
   },
@@ -44,24 +39,23 @@
         ]
       }
     ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "command": "plannotator",
-            "timeout": 1800,
-            "type": "command"
-          }
-        ],
-        "matcher": "ExitPlanMode"
-      }
-    ],
     "PreCompact": [
       {
         "hooks": [
           {
             "command": "bd prime",
             "type": "command"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/trahman/.claude/hooks/rtk-rewrite.sh"
           }
         ]
       }
@@ -200,7 +194,6 @@
       "WebFetch",
       "WebSearch"
     ],
-    "defaultMode": "plan",
     "deny": [
       "Bash(git reset --hard:*)"
     ]
