@@ -108,6 +108,12 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 
+# Set click pressure to light (0=light, 1=medium, 2=firm)
+defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
+defaults write com.apple.AppleMultitouchTrackpad SecondClickThreshold -int 0
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad FirstClickThreshold -int 0
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad SecondClickThreshold -int 0
+
 # Enable three-finger drag (built-in and bluetooth)
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
