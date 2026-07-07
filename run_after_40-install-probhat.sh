@@ -15,7 +15,7 @@ sources = data.get("AppleEnabledInputSources", [])
 
 probhat = {
     "InputSourceKind": "Keyboard Layout",
-    "KeyboardLayout ID": "-103001",
+    "KeyboardLayout ID": -103001,
     "KeyboardLayout Name": "Probhat",
 }
 
