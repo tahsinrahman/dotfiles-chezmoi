@@ -198,7 +198,7 @@ defaults write com.apple.screencapture disable-shadow -bool true
 # Add ~/Screenshots to Finder sidebar when mysides is installed.
 if command -v mysides >/dev/null 2>&1; then
     mysides remove "Screenshots" >/dev/null 2>&1 || true
-    mysides add "Screenshots" "file://${SCREENSHOTS_DIR}" >/dev/null 2>&1
+    mysides add "Screenshots" "file://${SCREENSHOTS_DIR}" >/dev/null 2>&1 || true
 fi
 
 # Lock screen
