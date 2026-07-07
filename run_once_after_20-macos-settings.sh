@@ -139,11 +139,6 @@ defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 # Disable smart dashes (e.g. -- -> —)
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
-# Disable automatic keyboard backlight adjustment and set brightness to zero.
-defaults write com.apple.cloudsettings.keyboard KeyboardBacklightABEnabled -bool false
-defaults write com.apple.cloudsettings.keyboard KeyboardBacklightBrightness -int 0
-defaults write com.apple.Keyboard-Settings.extension KeyboardBacklightABEnabled -bool false
-defaults write com.apple.Keyboard-Settings.extension KeyboardBacklightBrightness -int 0
 # Disable accent popup on key hold; enable key repeat instead
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # Fast key repeat rate (lower = faster; default 6)
