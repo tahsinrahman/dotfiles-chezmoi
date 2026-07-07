@@ -149,7 +149,7 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 # Don't create .DS_Store on USB volumes
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 # Reduce UI animations system-wide
-defaults write com.apple.universalaccess reduceMotion -bool true 2>/dev/null
+defaults write com.apple.universalaccess reduceMotion -bool true 2>/dev/null || true
 
 # Sharing and continuity
 
