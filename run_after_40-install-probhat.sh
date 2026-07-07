@@ -11,17 +11,18 @@ from pathlib import Path
 
 path = Path.home() / "Library/Preferences/com.apple.HIToolbox.plist"
 data = plistlib.loads(path.read_bytes()) if path.exists() else {}
-sources = data.get("AppleEnabledInputSources", [])
-
 probhat = {
     "InputSourceKind": "Keyboard Layout",
     "KeyboardLayout ID": -103001,
     "KeyboardLayout Name": "Probhat",
 }
 
-sources = [source for source in sources if source.get("KeyboardLayout Name") != "Probhat"]
-sources.append(probhat)
-data["AppleEnabledInputSources"] = sources
+for key in ("AppleEnabledInputSources", "AppleInputSourceHistory"):
+    sources = data.get(key, [])
+    sources = [source for source in sources if source.get("KeyboardLayout Name") != "Probhat"]
+    sources.append(probhat)
+    data[key] = sources
+
 path.write_bytes(plistlib.dumps(data))
 PY
 
