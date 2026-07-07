@@ -1,6 +1,10 @@
+{{- $git := dict }}
+{{- if hasKey . "git" }}
+{{- $git = .git }}
+{{- end }}
 [user]
-	email = {{ .git.email }}
-	name = {{ .git.name }}
+	email = {{ get $git "email" | default "tahsin.rahman@agoda.com" }}
+	name = {{ get $git "name" | default "Md Tahsin Rahman" }}
 
 [core]
     autocrlf = input
@@ -27,7 +31,7 @@
 [push]
 	autoSetupRemote = true
 
-{{- if .machine.is_work }}
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
 
 [push]
 	pushOption = merge_request.create
@@ -41,15 +45,15 @@
 	push-stack = "!/bin/bash -c 'BRANCH=\"${1:-HEAD}\"; DEFAULT=$(git default-branch); PREV=\"$DEFAULT\"; MERGE_BASE=$(git merge-base-origin \"$BRANCH\"); while read -r BR || [[ -n \"$BR\" ]]; do git push --force-with-lease -o merge_request.create -o merge_request.remove_source_branch -o merge_request.squash -o merge_request.label=scrum::barend -o \"merge_request.label=Ready for Review\" -o merge_request.assign=trahman -o merge_request.target=\"$PREV\" origin \"$BR\"; PREV=\"$BR\"; done < <(git log --reverse --decorate-refs=refs/heads --simplify-by-decoration --pretty=format:\"%(decorate:prefix=,suffix=,tag=,separator=%n)\" \"$MERGE_BASE\"..\"$BRANCH\")' -- "
 
 # Work-specific Git configuration
-{{- if hasKey .git "gitlab_domain" }}
+{{- if hasKey $git "gitlab_domain" }}
 # Git URL rewrites for work GitLab
-[url "git@{{ .git.gitlab_domain }}:"]
-	insteadOf = https://{{ .git.gitlab_domain }}
+[url "git@{{ get $git "gitlab_domain" }}:"]
+	insteadOf = https://{{ get $git "gitlab_domain" }}
 {{- end }}
 
-{{- if hasKey .git "token" }}
+{{- if hasKey $git "token" }}
 # Credential helper with personal access token
 [credential]
-	helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ .git.token }}\"; }; f"
+	helper = "!f() { sleep 1; echo \"username=token\"; echo \"password={{ get $git "token" }}\"; }; f"
 {{- end }}
 {{- end }}

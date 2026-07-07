@@ -2,7 +2,7 @@
 # Ensure OpenAI API key is configured on work machines
 # This runs before chezmoi apply to prevent template failures
 
-{{- if .machine.is_work }}
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
 
 set -e
 

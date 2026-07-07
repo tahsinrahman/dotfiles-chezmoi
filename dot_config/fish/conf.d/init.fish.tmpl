@@ -24,7 +24,7 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx PATH /home/linuxbrew/.linuxbrew/bin $PATH
 {{- end }}
 
-{{- if .machine.is_work }}
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
 # Work-specific OpenAI configuration
 set -xg OPENAI_API_KEY "{{ .openai.api_key }}"
 set -xg OPENAI_BASE_URL "https://genai-gateway.agoda.is/v1"
@@ -35,4 +35,3 @@ set -xg GOPRIVATE gitlab.agodadev.io
 fish_hybrid_key_bindings
 
 atuin init fish --disable-up-arrow | source
-
