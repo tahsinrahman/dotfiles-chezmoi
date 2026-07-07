@@ -215,3 +215,4 @@ log "Reloading affected macOS services"
 killall Finder >/dev/null 2>&1 || true
 killall Dock >/dev/null 2>&1 || true
 killall SystemUIServer >/dev/null 2>&1 || true
+killall cfprefsd >/dev/null 2>&1 || true
