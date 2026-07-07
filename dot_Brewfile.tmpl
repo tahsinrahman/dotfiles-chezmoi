@@ -8,6 +8,12 @@
 # ============================================================================
 
 tap "nikitabobko/tap"            # AeroSpace window manager
+tap "anomalyco/tap"
+tap "argoproj/tap"
+tap "oven-sh/bun"
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
+tap "tools/core", "git@gitlab.agodadev.io:tools/homebrew-core.git"
+{{- end }}
 
 # ============================================================================
 # DEVELOPMENT TOOLS - Programming Languages & Build Tools
@@ -28,26 +34,36 @@ brew "uv"                         # Fast Python package installer
 
 # Version Control & Git Tools
 brew "delta"                      # Syntax-highlighting pager for git, diff, and grep
+brew "gh"                         # GitHub CLI
+brew "git-absorb"                 # Auto-fixup git changes
+brew "git-delta"                  # Syntax-highlighting pager for git
+brew "lazygit"                    # Terminal UI for git
 
 # Build & Deployment Tools
 brew "make"                       # Build automation tool (system default)
+brew "protobuf"                   # Protocol buffers
 
 # ============================================================================
 # KUBERNETES & CLOUD NATIVE TOOLS
 # ============================================================================
 
-brew "argocd"                     # GitOps continuous delivery for Kubernetes
-brew "cmctl"                      # Cert-manager CLI tool
-brew "container-structure-test"   # Validate container structure
-brew "crane"                      # Tool for managing container images
-brew "dive"                       # Explore Docker image layers
-brew "helm"                       # Kubernetes package manager
-brew "k9s"                        # Kubernetes CLI manager
-brew "ko"                         # Build and deploy Go apps on Kubernetes
-brew "krew"                       # Kubectl plugin manager
-brew "kubebuilder"                # SDK for building Kubernetes APIs
-brew "kubernetes-cli"             # Kubernetes command-line interface
-brew "stern"                      # Multi-pod log tailing
+# brew "argocd"                     # GitOps continuous delivery for Kubernetes
+# brew "clusterctl"                 # Cluster API CLI
+# brew "cmctl"                      # Cert-manager CLI tool
+# brew "container-structure-test"   # Validate container structure
+# brew "crane"                      # Tool for managing container images
+# brew "dive"                       # Explore Docker image layers
+# brew "etcd"                       # Distributed key-value store
+# brew "helm"                       # Kubernetes package manager
+# brew "k9s"                        # Kubernetes CLI manager
+# brew "kind"                       # Local Kubernetes clusters
+# brew "ko"                         # Build and deploy Go apps on Kubernetes
+# brew "krew"                       # Kubectl plugin manager
+# brew "kubebuilder"                # SDK for building Kubernetes APIs
+# brew "kubernetes-cli"             # Kubernetes command-line interface
+# brew "kustomize"                  # Kubernetes configuration customization
+# brew "skaffold"                   # Kubernetes development workflow
+# brew "stern"                      # Multi-pod log tailing
 
 # Additional Kubernetes tools:
 # brew "kubectl-debug"              # Debug running pods
@@ -64,17 +80,22 @@ brew "stern"                      # Multi-pod log tailing
 # ============================================================================
 
 # Modern CLI Replacements
-brew "eza"                        # Modern ls with colors, icons, and git integration
-brew "fd"                         # Simple, fast alternative to find
-brew "ripgrep"                    # Fast grep alternative
-brew "sd"                         # Intuitive find & replace CLI
+# brew "eza"                        # Modern ls with colors, icons, and git integration
+# brew "fd"                         # Simple, fast alternative to find
+# brew "lsd"                        # Modern ls alternative
+# brew "ripgrep"                    # Fast grep alternative
+# brew "sd"                         # Intuitive find & replace CLI
+# brew "yazi"                       # Terminal file manager
+# brew "zoxide"                     # Smarter cd
 
 # File & Directory Tools
-brew "ack"                        # Search tool like grep
-brew "coreutils"                  # GNU core utilities
-brew "gnu-sed"                    # GNU sed
-brew "grep"                       # GNU grep
-brew "hwatch"                     # Modern watch with highlighting
+# brew "ack"                        # Search tool like grep
+# brew "coreutils"                  # GNU core utilities
+# brew "exiftool"                   # Read/write meta info in files
+# brew "gnu-sed"                    # GNU sed
+# brew "grep"                       # GNU grep
+# brew "hwatch"                     # Modern watch with highlighting
+# brew "rclone"                     # Sync files to cloud storage
 brew "tree"                       # Display directory tree
 
 # Additional file & directory utilities:
@@ -89,9 +110,8 @@ brew "atuin"                      # Shell history sync
 brew "bash"                       # Bourne-Again SHell
 brew "direnv"                     # Load/unload environment variables
 brew "fish"                       # Friendly interactive shell
+brew "fisher"                     # Fish plugin manager
 brew "fzf"                        # Command-line fuzzy finder
-brew "tmux"                       # Terminal multiplexer
-brew "tpm"                        # Tmux Plugin Manager
 
 # System Monitoring & Info
 brew "htop"                       # Interactive process viewer
@@ -99,12 +119,15 @@ brew "htop"                       # Interactive process viewer
 # brew "iproute2mac"                # Linux iproute2 for macOS
 
 # Text Processing & Search
+brew "biome"                      # JavaScript/TypeScript formatter and linter
 brew "jq"                         # JSON processor
+# brew "prettier"                   # Code formatter
 brew "yq"                         # YAML processor
 # brew "oniguruma"                  # Regular expressions library
 
 # File Management
 # brew "exiftool"                   # Read/write meta info in files
+brew "mole"                       # Clean up macOS files
 # brew "pandoc"                     # Universal document converter
 brew "topgrade"                   # Upgrade all the things
 
@@ -150,29 +173,44 @@ brew "openssl@3"                  # OpenSSL cryptography library
 
 # Design & Diagramming
 brew "d2"                         # Modern diagram scripting language
+# brew "ghostscript"                # PostScript and PDF tools
+# brew "imagemagick"                # Image manipulation tools
+# brew "montage"                    # Image montage tool
 # brew "graphviz"                   # Graph visualization
 
 # ============================================================================
 # MISCELLANEOUS CLI TOOLS
 # ============================================================================
 
+brew "anomalyco/tap/opencode", trusted: true # OpenCode CLI
 brew "glab"                       # GitLab CLI tool
 brew "mas"                        # Mac App Store CLI
+brew "terminal-notifier"          # Send macOS notifications
+brew "worktrunk"                  # Worktrunk CLI
 brew "ytt"                        # YAML templating tool
+
+# Editors
+brew "neovim"                     # Terminal editor
+
+# Task Management
+# brew "task"                       # Task runner
+# brew "taskd"                      # Taskwarrior sync server
+# brew "tasksh"                     # Taskwarrior shell
+# brew "taskwarrior-tui"            # Taskwarrior terminal UI
 
 # Additional CLI tools:
 # brew "bfg"                        # Remove large files from Git history
 # brew "gemini-cli"                 # Gemini protocol client
-# brew "terminal-notifier"          # Send macOS notifications
 
 # ============================================================================
 # GUI APPLICATIONS (Casks)
 # ============================================================================
 
 # Development & Programming
-cask "claude"                     # Claude AI desktop app
-cask "claude-code"                # Claude Code editor
-cask "cursor"                     # AI-powered code editor
+cask "codex"                     # Codex CLI/app package
+cask "codex-app"                 # Codex desktop app
+# cask "cursor"                    # AI-powered code editor
+cask "opencode-desktop"          # OpenCode desktop app
 cask "visual-studio-code"         # VS Code editor
 
 # Additional development tools:
@@ -210,14 +248,16 @@ cask "whatsapp"                   # WhatsApp Desktop
 
 # Productivity & Notes
 # cask "notion"                     # Note-taking and collaboration
+cask "freefilesync"               # File synchronization
 cask "obsidian"                   # Knowledge base app
 cask "raycast"                    # Spotlight replacement
 cask "voiceink"                   # Voice dictation tool
 
 # Window Management & System Tools
-cask "aerospace"                  # Tiling window manager
+cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "karabiner-elements"         # Keyboard customizer
 cask "mos"                        # Mouse smoothing
+cask "mysides"                    # Finder sidebar manager
 
 # Additional system tools:
 # cask "caffeine"                   # Keep Mac awake
@@ -233,10 +273,11 @@ cask "logi-options+"              # Logitech Options+
 
 # Security & Authentication
 # cask "authy"                      # 2FA app
-# cask "vip-access"                 # Symantec VIP Access
+cask "vip-access"                 # Symantec VIP Access
 
 # Media & Entertainment
 # cask "calibre"                    # E-book manager
+cask "fastrawviewer"              # RAW photo viewer
 # cask "iina"                       # Modern media player
 # cask "plex"                       # Media server
 cask "spotify"                    # Music streaming
@@ -244,7 +285,7 @@ cask "spotify"                    # Music streaming
 
 # Adobe Suite
 # cask "adobe-acrobat-reader"       # PDF reader
-# cask "adobe-creative-cloud"       # Creative Cloud
+cask "adobe-creative-cloud"       # Creative Cloud
 # cask "adobe-digital-editions"     # E-book reader
 
 # Document & Publishing
@@ -254,16 +295,24 @@ cask "spotify"                    # Music streaming
 # cask "wireshark-app"              # Network protocol analyzer
 
 # Fonts
-cask "font-meslo-lg-nerd-font"    # Meslo LG Nerd Font
+cask "font-jetbrains-mono-nerd-font" # JetBrainsMono Nerd Font
 
 # Additional fonts:
 # cask "font-hack-nerd-font"        # Nerd Font - Hack
 # cask "font-inconsolata"           # Inconsolata font
+# cask "font-meslo-lg-nerd-font"    # Meslo LG Nerd Font
 
 # ============================================================================
 # MAC APP STORE APPLICATIONS
 # ============================================================================
 
 mas "AdGuard for Safari", id: 1440147259
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
+mas "Okta Verify", id: 490179405
+{{- end }}
+mas "PhotoScape X", id: 929507092
+mas "Vimari", id: 1480933944
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
+mas "Windows App", id: 1295203466
+{{- end }}
 # mas "Sourcegraph for Safari", id: 1543262193
-# mas "Vimari", id: 1480933944
