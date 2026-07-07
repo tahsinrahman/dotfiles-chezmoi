@@ -65,8 +65,8 @@ defaults write com.apple.dock minimize-to-application -bool true
 defaults write com.apple.dock expose-group-apps -bool true
 # Hide recent apps section in dock
 defaults write com.apple.dock show-recents -bool false
-# Keep Dock unpinned; running apps still appear while open.
-defaults write com.apple.dock persistent-apps -array
+# Keep only System Settings pinned; running apps still appear while open.
+defaults write com.apple.dock persistent-apps -array '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/System/Applications/System Settings.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
 defaults write com.apple.dock persistent-others -array
 # Auto-hide the dock
 defaults write com.apple.dock autohide -bool true
