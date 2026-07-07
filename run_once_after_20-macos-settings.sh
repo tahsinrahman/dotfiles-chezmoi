@@ -147,8 +147,11 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # Disable Spotlight Command-Space so Raycast can own it.
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '{ enabled = 0; value = { parameters = (32, 49, 1048576); type = standard; }; }'
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '{ enabled = 0; value = { parameters = (32, 49, 1572864); type = standard; }; }'
+SPOTLIGHT_HOTKEYS="${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist"
+/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:65 dict" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:65:enabled bool false" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || \
+    /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:65:enabled false" "$SPOTLIGHT_HOTKEYS"
 defaults write com.raycast.macos raycastGlobalHotkey -string "Command-49"
 defaults write com.raycast.macos onboardingCompleted -bool true
 defaults write com.raycast.macos onboarding_setupHotkey -bool true
