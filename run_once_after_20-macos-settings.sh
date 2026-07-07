@@ -143,6 +143,10 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 # Short delay before repeat starts (lower = shorter; default 25)
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
+# Disable Spotlight Command-Space so Raycast can own it.
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '{ enabled = 0; value = { parameters = (32, 49, 1048576); type = standard; }; }'
+defaults write com.raycast.macos raycastGlobalHotkey -string "Command-49"
+
 # UI
 
 log "Applying UI and filesystem preferences"
