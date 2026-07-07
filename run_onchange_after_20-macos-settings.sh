@@ -148,7 +148,16 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # Disable Spotlight Command-Space so Raycast can own it.
 SPOTLIGHT_HOTKEYS="${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist"
-/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64 dict" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || \
+    /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" "$SPOTLIGHT_HOTKEYS"
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value dict" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:type string standard" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Delete :AppleSymbolicHotKeys:64:value:parameters" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters array" "$SPOTLIGHT_HOTKEYS"
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:0 integer 32" "$SPOTLIGHT_HOTKEYS"
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:1 integer 49" "$SPOTLIGHT_HOTKEYS"
+/usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:2 integer 1048576" "$SPOTLIGHT_HOTKEYS"
 /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:65 dict" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || true
 /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:65:enabled bool false" "$SPOTLIGHT_HOTKEYS" 2>/dev/null || \
     /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:65:enabled false" "$SPOTLIGHT_HOTKEYS"
