@@ -6,6 +6,7 @@
 CLAUDE.md
 AGENTS.md
 README.md
+mac-setup-todo.md
 
 # Work-specific Brewfile - keep local, never commit to git
 .Brewfile.work
