@@ -23,8 +23,9 @@ end
 
 fundle init
 
-# Configure tide after fundle has loaded it
-# tide configure --auto --style=Lean --prompt_colors='True color' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=No
+if status is-interactive; and functions -q tide; and not set -q tide_prompt_add_newline_before
+    tide configure --auto --style=Lean --prompt_colors='True color' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=No
+end
 
 # direnv hook fish | source
 

@@ -208,7 +208,9 @@ brew "neovim"                     # Terminal editor
 # Development & Programming
 cask "codex"                     # Codex CLI/app package
 cask "codex-app"                 # Codex desktop app
-# cask "cursor"                    # AI-powered code editor
+{{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
+cask "cursor"                    # AI-powered code editor
+{{- end }}
 cask "opencode-desktop"          # OpenCode desktop app
 cask "visual-studio-code"         # VS Code editor
 

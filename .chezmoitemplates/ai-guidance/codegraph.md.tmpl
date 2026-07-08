@@ -1,0 +1,11 @@
+<!-- CODEGRAPH_START -->
+## CodeGraph
+
+In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
+
+- **Preflight:** from the repo root, if `.codegraph/` exists, run `codegraph sync` before ordinary text search, then start with `codegraph explore "<question or symbol>"`.
+- **MCP tools** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them. `codegraph_node` returns one symbol's source + callers, or reads a whole file with line numbers. If the tools are listed but deferred, load them by name via tool search.
+- **Shell** (always works): `codegraph explore "<symbol names or question>"` and `codegraph node <symbol-or-file>` print the same output.
+
+If there is no `.codegraph/` directory, you may run `codegraph init` to initialize CodeGraph when the user asks for it or agrees to it; otherwise skip CodeGraph entirely. If `.codegraph/` exists but may be stale, run `codegraph sync` before grep/find. If `.codegraph/` exists but CodeGraph is broken, corrupt, unreadable, or reports errors such as `unable to open database file`, run `codegraph index` to rebuild the index before falling back to grep/find.
+<!-- CODEGRAPH_END -->

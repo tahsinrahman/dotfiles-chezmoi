@@ -1,7 +1,7 @@
-{{- $git := dict }}
-{{- if hasKey . "git" }}
-{{- $git = .git }}
-{{- end }}
+{{- $git := dict -}}
+{{- if hasKey . "git" -}}
+{{- $git = .git -}}
+{{- end -}}
 [user]
 	email = {{ get $git "email" | default "tahsin.rahman@agoda.com" }}
 	name = {{ get $git "name" | default "Md Tahsin Rahman" }}
@@ -10,6 +10,8 @@
     autocrlf = input
     pager = delta
 
+    untrackedCache = true
+    fsmonitor = true
 [interactive]
 	diffFilter = delta --color-only
 

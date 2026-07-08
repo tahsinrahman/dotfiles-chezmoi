@@ -5,6 +5,18 @@ layout="/Library/Keyboard Layouts/Probhat.keylayout"
 
 [[ -f "$layout" ]] || curl -fsSL https://raw.githubusercontent.com/mdminhazulhaque/probhat-macos/master/install.sh | sudo bash
 
+python3 <<'PY' && exit 0 || true
+import plistlib
+from pathlib import Path
+
+path = Path.home() / "Library/Preferences/com.apple.HIToolbox.plist"
+data = plistlib.loads(path.read_bytes()) if path.exists() else {}
+keys = ("AppleEnabledInputSources", "AppleInputSourceHistory")
+if all(any(source.get("KeyboardLayout Name") == "Probhat" for source in data.get(key, [])) for key in keys):
+    raise SystemExit(0)
+raise SystemExit(1)
+PY
+
 python3 <<'PY'
 import plistlib
 from pathlib import Path

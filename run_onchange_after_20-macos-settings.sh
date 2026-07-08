@@ -9,6 +9,9 @@ FINDER_DEFAULT_VIEW="Nlsv" # Nlsv=list, Clmv=columns, Flwv=gallery, Icwv=icons
 FINDER_DEFAULT_LOCATION="file://${HOME}/"
 DOCK_TILESIZE=36
 TRACKPAD_SPEED=3
+MOUSE_SPEED=3
+MOUSE_DOUBLE_CLICK_SPEED=1
+MOUSE_SCROLL_SPEED=1
 SCREENSHOTS_DIR="${HOME}/Screenshots"
 
 log() {
@@ -124,6 +127,21 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeF
 # Enable dragging (built-in and bluetooth)
 defaults write com.apple.AppleMultitouchTrackpad Dragging -int 1
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
+
+# Mouse
+
+log "Applying Mouse preferences"
+
+# Tracking speed (0=slow, 3=fast)
+defaults write NSGlobalDomain com.apple.mouse.scaling -float "$MOUSE_SPEED"
+# Natural (content-follows-finger) scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+# Secondary click on right side
+defaults write com.apple.AppleMultitouchMouse MouseButtonMode -string TwoButton
+defaults write com.apple.driver.AppleBluetoothMultitouch.mouse MouseButtonMode -string TwoButton
+# Double-click and scroll speed
+defaults write NSGlobalDomain com.apple.mouse.doubleClickThreshold -float "$MOUSE_DOUBLE_CLICK_SPEED"
+defaults write NSGlobalDomain com.apple.scrollwheel.scaling -float "$MOUSE_SCROLL_SPEED"
 
 # Keyboard
 

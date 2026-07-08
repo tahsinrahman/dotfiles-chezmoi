@@ -121,6 +121,10 @@ automatically-unhide-macos-hidden-apps = false
     run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
+    if.app-id = 'com.openai.codex'
+    run = 'move-node-to-workspace I'
+
+[[on-window-detected]]
     if.app-name-regex-substring = 'Cursor'
     run = 'move-node-to-workspace I'
 
@@ -159,4 +163,12 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
     if.app-id = 'org.videolan.vlc'
     run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'Lightroom'
+    run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'Photoshop'
+    run = 'move-node-to-workspace 6'
 
