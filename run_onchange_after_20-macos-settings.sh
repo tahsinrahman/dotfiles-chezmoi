@@ -5,7 +5,7 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
     exit 0
 fi
 
-FINDER_DEFAULT_VIEW="Nlsv" # Nlsv=list, Clmv=columns, Flwv=gallery, Icwv=icons
+FINDER_DEFAULT_VIEW="Clmv" # Nlsv=list, Clmv=columns, Flwv=gallery, Icwv=icons
 FINDER_DEFAULT_LOCATION="file://${HOME}/"
 DOCK_TILESIZE=36
 TRACKPAD_SPEED=3
