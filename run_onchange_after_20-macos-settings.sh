@@ -107,6 +107,8 @@ log "Applying Trackpad preferences"
 defaults write -g com.apple.trackpad.scaling -float "$TRACKPAD_SPEED"
 # Natural (content-follows-finger) scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+# Enable 2-finger swipe left/right to navigate between pages (back/forward)
+defaults write NSGlobalDomain AppleEnableSwipeNavigateWithScrolls -bool true
 
 # Enable tap to click (both current host and global, built-in and bluetooth)
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
