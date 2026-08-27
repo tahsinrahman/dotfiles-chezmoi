@@ -25,9 +25,9 @@ set -gx PATH /home/linuxbrew/.linuxbrew/bin $PATH
 {{- end }}
 
 {{- if (and (hasKey . "machine") (hasKey .machine "is_work") .machine.is_work) }}
-# Work-specific OpenAI configuration
-set -xg OPENAI_API_KEY "{{ .openai.api_key }}"
-set -xg OPENAI_BASE_URL "https://genai-gateway.agoda.is/v1"
+# GenAI gateway (not OPENAI_* — that makes Pi treat bundled openai/* as available)
+set -xg GENAI_GW_API_KEY "{{ .openai.api_key }}"
+
 
 set -xg GOPRIVATE gitlab.agodadev.io
 {{- end }}

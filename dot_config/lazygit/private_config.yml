@@ -8,9 +8,9 @@ git:
     showGraph: always
     showWholeGraph: true
     order: topo-order
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --dark --paging=never --line-numbers
+      command: delta --dark --paging=never --line-numbers
 keybinding:
   commits:
     moveDownCommit: J
