@@ -29,6 +29,7 @@ automatically-unhide-macos-hidden-apps = false
     outer.right =      0
 
 [mode.main.binding]
+    alt-enter = 'exec-and-forget open -a cmux'
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 
@@ -106,7 +107,7 @@ automatically-unhide-macos-hidden-apps = false
 
 
 [[on-window-detected]]
-    if.app-id = 'com.mitchellh.ghostty'
+    if.app-id = 'com.cmuxterm.app'
     run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
